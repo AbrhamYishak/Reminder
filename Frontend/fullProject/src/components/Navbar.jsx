@@ -1,61 +1,33 @@
-import React, { useRef, useState ,useContext} from "react";
-import { motion } from "framer-motion";
+import {Outlet, Link} from "react-router-dom";
+import { MessageSquareText } from 'lucide-react';
+import { MessageSquareX } from 'lucide-react';
+import { Settings } from 'lucide-react';
 function Nav() {
-  const [position, setPosition] = useState({
-    left: 0,
-    width: 0,
-    opacity: 0,
-  });
   return (
-    <ul
-      className="margin-auto flex w-fit rounded-full border-white bg-black/30  text-black z-10"
-      onMouseLeave={() => setPosition((pv) => ({ ...pv, opacity: 0 }))}
-    >
-      <Tab setPosition={setPosition}> 
-  Home
-</Tab>
-      <Tab setPosition={setPosition}>
-  Active Messages
-</Tab>
-      <Tab setPosition={setPosition}>
-  Sent Messages
-</Tab>
-<Cursor position={position} />
-    </ul>
-  );
-}
-
-const Tab = ({ children, setPosition }) => {
-  const ref = useRef(null);
-
-  return (
-    <li
-      ref={ref}
-      onMouseEnter={() => {
-        if (!ref.current) return;
-
-        const { width } = ref.current.getBoundingClientRect();
-        setPosition({
-          width,
-          opacity: 1,
-          left: ref.current.offsetLeft,
-        });
-      }}
-      className="relative z-10 block cursor-pointer px-3 py-1.5 text-xs uppercase text-white mix-blend-difference md:px-5 md:py-3 md:text-base"
-    >
-      {children}
-    </li>
-  );
-};
-
-const Cursor = ({ position }) => {
-  return (
-    <motion.li
-      animate={position}
-      className="absolute z-0 h-7 rounded-full bg-black md:h-12"
-    />
-  );
-};
-
-export default Nav;
-
+	  <div>
+<div class="flex flex-col m-4 items-center justify-center">
+  <div class="border border-gray-300 py-3 flex gap-1 shadow-xl rounded-md">
+    <div class="group relative px-4 cursor-pointer">
+      <div class="flex h-10 items-center gap-1 justify-center rounded-full hover:text-blue-500">
+          <MessageSquareText/> 
+		  <Link to = "/"><p className="text-lg">Active</p></Link>
+      </div>
+    </div>
+    <div class="group relative px-4 cursor-pointer">
+      <div class="flex h-10 items-center gap-1 justify-center rounded-full hover:text-blue-500">
+	     <MessageSquareX/>
+         <Link to = "/inactive"><p className="text-lg">Inactive</p></Link>
+      </div>
+</div>
+<div class="group relative px-4 cursor-pointer">
+  <div class="flex h-10  items-center gap-1 justify-center rounded-full hover:text-blue-500"> 
+	    <Settings/>
+        <Link to = "/setting"><p className="text-lg">Setting</p></Link>
+  </div>
+    </div>
+</div>
+</div>
+<Outlet/>
+	  </div>
+  )}
+export default Nav

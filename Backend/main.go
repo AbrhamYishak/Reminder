@@ -85,7 +85,7 @@ func createMessage(c *gin.Context){
 
 	c.IndentedJSON(http.StatusOK, gin.H{"message": "Successfully created the message"})
 }
-func sendMail(message string,address []string){
+func sendMail(message string,address []string) error{
 	m := gomail.NewMessage()
 	m.SetHeader("From", "abrhamyishakyifat@gmail.com")
 	m.SetHeader("To", address...)
@@ -93,10 +93,10 @@ func sendMail(message string,address []string){
 	m.SetBody("text/html", fmt.Sprintf("<h1>Hello there!</h1><p>%v</p>",message))
 	d := gomail.NewDialer("smtp.gmail.com", 587, "abrhamyishakyifat@gmail.com", "empg rnvf hrrs wulx")
 	if err := d.DialAndSend(m); err != nil {
-		panic(err)
-	}else{
-		fmt.Println("Message successfully sent")
+		return err
 	}
+	fmt.Println("Message successfully sent")
+	return nil
  
 }
 func editMail(c *gin.Context){
@@ -120,6 +120,17 @@ func editMail(c *gin.Context){
 	message.Time = new_message.Time
 	message.Email = new_message.Email
 	message.Name = new_message.Name
+	for i, v := range *h {
+    if v.ID == message.ID {
+        (*h)[i] = message
+        heap.Fix(h, i)
+        break
+    }
+}
+	select {
+	case updateChan <- struct{}{}:
+	default:
+	}
 	if result:=db.Save(message).Error; result!= nil{
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not edit the existing data"})
 		return
@@ -188,7 +199,10 @@ func main(){
 				}else{
                  hLock.Unlock()
                  fmt.Println("Sending email to:", message.Email)
-                 sendMail(message.Message, strings.Split(message.Email, " "))
+				 if err:= sendMail(message.Message, strings.Split(message.Email, " ")); err != nil{
+					 fmt.Println("could not send the email due to invalid email or internet connection")
+					 continue
+				 }
                  db.Delete(&due, due.ID)
 			}
             } else {
