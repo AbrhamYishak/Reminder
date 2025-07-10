@@ -1,4 +1,4 @@
-import useState from 'react'
+import React, {useState} from 'react'
 import Newreminder from './Newreminder.jsx'
 
 function ActiveMessages()
@@ -15,7 +15,7 @@ function ActiveMessages()
       >
         + Add Reminder
       </button>
-	   <Newreminder/>
+	  { add && <Newreminder/>}
     </div>
   )
 }
