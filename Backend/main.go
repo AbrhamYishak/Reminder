@@ -11,8 +11,9 @@ import (
 	"gopkg.in/gomail.v2"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"Backend/Models"
 )
-type MessageHeap []Message
+type MessageHeap []Models.Message
 var hLock sync.Mutex
 func (h MessageHeap) Len() int { return len(h) }
 func (h MessageHeap) Less(i, j int) bool {
@@ -21,7 +22,7 @@ func (h MessageHeap) Less(i, j int) bool {
 func (h MessageHeap) Swap(i, j int) { h[i], h[j] = h[j], h[i] }
 
 func (h *MessageHeap) Push(x any) {
-	*h = append(*h, x.(Message))
+	*h = append(*h, x.(Models.Message))
 }
 var change = make(chan time.Duration)
 func (h *MessageHeap) Pop() any {
@@ -30,15 +31,6 @@ func (h *MessageHeap) Pop() any {
 	item := old[n-1]
 	*h = old[0:n-1]
 	return item
-}
-type Message struct{
-	ID  int64
-	Name  string
-	Email string
-	Message string
-	Time time.Time
-	CreatedAt time.Time
-	UpdatedAt time.Time
 }
 var updateChan = make(chan struct{})
 var h = &MessageHeap{}
@@ -49,7 +41,21 @@ func getMessages(c *gin.Context){
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "could not connect to database"})
 		return
 	}
-	var m []Message
+	var m []Models.Message
+	if err := db.Find(&m).Error; err != nil{
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "could not retrieve the data"})
+		return
+	}
+	c.IndentedJSON(http.StatusOK, m)
+}
+func getInactiveMessages(c *gin.Context){
+	dsn := "root:12345678@tcp(127.0.0.1:3306)/reminder?charset=utf8mb4&parseTime=True&loc=Local"
+	db,err:= gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	if err != nil{
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "could not connect to database"})
+		return
+	}
+	var m []Models.InactiveMessage
 	if err := db.Find(&m).Error; err != nil{
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "could not retrieve the data"})
 		return
@@ -59,7 +65,7 @@ func getMessages(c *gin.Context){
 func createMessage(c *gin.Context){
 	dsn := "root:12345678@tcp(127.0.0.1:3306)/reminder?charset=utf8mb4&parseTime=True&loc=Local"
 	db,err:= gorm.Open(mysql.Open(dsn), &gorm.Config{})
-	var m Message
+	var m Models.Message
 	if err := c.BindJSON(&m); err != nil{
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "wrong input"})
 		return
@@ -68,6 +74,7 @@ func createMessage(c *gin.Context){
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "could not connect to database"})
 		return
 	}
+	db.AutoMigrate(&m)
 	result := db.Create(&m) 
 	if result.Error != nil{
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not write the data to the database"})
@@ -106,12 +113,12 @@ func editMail(c *gin.Context){
 	if err != nil{
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not connnect with the database"})
 		return} 
-	var new_message Message
+	var new_message Models.Message
 	if err:=c.BindJSON(&new_message); err != nil{
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"message":"not the write json"})
 		return
 	}
-	var message Message
+	var message Models.Message
 	if result:=db.First(&message,id).Error; result != nil{
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not find the message with the given id"})
 		return
@@ -119,7 +126,7 @@ func editMail(c *gin.Context){
 	message.Message = new_message.Message
 	message.Time = new_message.Time
 	message.Email = new_message.Email
-	message.Name = new_message.Name
+	message.Link = new_message.Link
 	for i, v := range *h {
     if v.ID == message.ID {
         (*h)[i] = message
@@ -146,8 +153,20 @@ func delMail(c *gin.Context){
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not connnect with the database"})
 		return
 	} 
-	var m Message
-	if err:=db.Delete(m, id).Error; err!= nil{
+	var m Models.Message
+    if err:=db.Find(&m, id).Error; err!= nil{
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could find the message"})
+	}
+	var newM Models.InactiveMessage
+	newM.Link = m.Link
+    newM.Message = m.Message
+	newM.Time = m.Time
+    newM.Email = m.Email
+	fmt.Println(newM,m)
+	if err:=db.Create(&newM).Error; err!=nil{
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not transfer message to inactive message"})
+	}
+    if err:=db.Delete(m, id).Error; err!= nil{
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not delete the message"})
 	}
 	c.IndentedJSON(http.StatusOK, gin.H{"message":"successfully deleted the message"})
@@ -158,7 +177,7 @@ func main(){
 	if err != nil{
 		fmt.Println(err)
 		return}
-	var messages []Message
+	var messages []Models.Message
 	db.Find(&messages)
 	heap.Init(h)
 	for _, m := range messages {
@@ -191,8 +210,8 @@ func main(){
         case <-timer.C:
             hLock.Lock()
             if h.Len() > 0 && !(*h)[0].Time.After(time.Now()) {
-                due := heap.Pop(h).(Message)
-				var message Message
+                due := heap.Pop(h).(Models.Message)
+				var message Models.Message
 				if err:= db.First(&message, due.ID).Error; err!=nil{
 					fmt.Println("could not find the message with the given id")
 					hLock.Unlock()
@@ -216,6 +235,7 @@ func main(){
 	router := gin.Default()
 	router.POST("/createMessage", createMessage)
 	router.GET("/getMessages", getMessages)
+	router.GET("/getInactiveMessages", getInactiveMessages)
 	router.PATCH("/editMessage/:id", editMail)
 	router.DELETE("/deleteMessage/:id", delMail)
 	router.Run()

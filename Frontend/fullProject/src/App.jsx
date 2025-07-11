@@ -5,7 +5,7 @@ import InactiveMessage from './components/InactiveMessage.jsx'
 import Setting from './components/Setting.jsx'
 function App() {
   return (
-    <div className="w-full h-[100vh] flex flex-col m-3 min-w-[500px]">
+    <div className="flex flex-col m-1 min-w-[600px]">
 	<HashRouter >
 	  <Routes>
 	  <Route path = "/" element = {<Navbar/>}>
