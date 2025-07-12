@@ -38,12 +38,20 @@ function Login() {
             >
               forgot your password ?
             </label>
+	  <div className="flex gap-2 justify-center items-center">
            <button
             type="button"
-            className="inline-flex self-center items-center justify-center mt-3 w-1/2 h-10 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition"
+            className="inline-flex self-center items-center justify-center mt-3 w-[40%] h-10 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition text-lg"
           >
-            Submit
+            Login
           </button>
+           <button
+            type="button"
+            className="inline-flex self-center items-center justify-center mt-3 w-[40%] h-10 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition text-lg"
+          >
+            Register
+          </button>
+	  </div>
           </div>
           <div className="flex items-center space-x-2 my-4">
             <hr className="flex-grow border-gray-300" />
