@@ -23,7 +23,7 @@ func main(){
 	router.POST("/login", auth.Login)
 	router.POST("/createMessage", endpoints.CreateMessage)
 	router.GET("/getMessages/:userid", endpoints.GetMessages)
-	router.GET("/getInactiveMessages", endpoints.GetInactiveMessages)
+	router.GET("/getInactiveMessages/:userid", endpoints.GetInactiveMessages)
 	router.PATCH("/editMessage/:id", endpoints.EditMail)
 	router.DELETE("/deleteMessage/:id", endpoints.DelMail)
 	router.Run()
