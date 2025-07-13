@@ -4,6 +4,7 @@ type User struct{
 	Email string
 	Password string
 	TimeZone string
+	IsVerfied bool
     Message []Message
 	InactiveMessage []InactiveMessage
 }
