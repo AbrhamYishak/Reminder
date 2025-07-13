@@ -5,7 +5,7 @@ import (
 	"net/http"
     "backend/db"	
     "golang.org/x/crypto/bcrypt"
-    "github.com/golang-jwt/jwt"
+    "github.com/golang-jwt/jwt/v5"
 	"fmt"
  )
  func Login(c *gin.Context){
