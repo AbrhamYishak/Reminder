@@ -4,13 +4,18 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
     "backend/db"	
-    "golang.org/x/crypto/bcrypt"
     "github.com/golang-jwt/jwt/v5"
+	"crypto/sha256"
+	"encoding/hex"
 	"time"
  )
 type Claims struct {
 	Email string 
 	jwt.RegisteredClaims
+}
+func HashToken(token string) string {
+	hash := sha256.Sum256([]byte(token)) 
+	return hex.EncodeToString(hash[:])  
 }
 func getToken(email string)(string, error){
 	var jwtKey = []byte("your_jwt_secret")
@@ -32,17 +37,6 @@ func Register(c *gin.Context){
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"message":"Faulty input"})
 		return
 	}
-	hashPassword, err := bcrypt.GenerateFromPassword([]byte(u.Password),bcrypt.DefaultCost)
-	if err != nil{
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not hash the password"})
-		return
-	}
-	u.Password = string(hashPassword)
-	db.AutoMigrate(&u)
-	if err := db.Create(&u).Error; err!=nil{
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not write the data to the database"})
-		return
-	}
 	token,err := getToken(u.Email)
 	if err != nil{
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not generate verification token"})
@@ -52,6 +46,13 @@ func Register(c *gin.Context){
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not send the verification token"})
 		return
 	}
+	u.VerificationToken = HashToken(token)
+	db.AutoMigrate(&u)
+	if err := db.Create(&u).Error; err!=nil{
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not write the data to the database"})
+		return
+	}
+
 	c.IndentedJSON(http.StatusOK, gin.H{"message":"succesfully created the user"})	
 
 }
