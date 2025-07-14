@@ -19,7 +19,11 @@ function Login() {
       const data = await res.json();
       if (res.ok) {
         alert('Verfication Completed');
-		navigate("/dashboard")
+		navigate("/setup",{
+			state: {
+				email : email
+			}
+		})
       } else {
         alert(data.message || 'Verification failed');
       }

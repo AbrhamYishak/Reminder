@@ -21,6 +21,7 @@ func main(){
 	}))
 	router.POST("/register", auth.Register)
 	router.POST("/login", auth.Login)
+	router.POST("/setup", endpoints.SetupTime)
 	router.POST("/createMessage", endpoints.CreateMessage)
 	router.GET("/getMessages/:userid", endpoints.GetMessages)
 	router.GET("/getInactiveMessages/:userid", endpoints.GetInactiveMessages)
