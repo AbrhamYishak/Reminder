@@ -28,8 +28,12 @@ import (
    })
    jwtToken, err := token.SignedString(jwtSecret)
    if err != nil {
-   c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
+       c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
    return
    }
+	u.IsVerfied = true
+	if err := db.Save(&u).Error; err!=nil{
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error":"could not update the data"})
+	}
    c.JSON(http.StatusOK, gin.H{"message": "User logged in successfully", "token": jwtToken})
  }

@@ -42,7 +42,7 @@ func Register(c *gin.Context){
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not generate verification token"})
 		return
 	}
-	if err := sendverifcationmail(token,[]string{u.Email}); err!=nil{
+	if err := SendVerificationMail(token,[]string{u.Email}); err!=nil{
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not send the verification token"})
 		return
 	}
