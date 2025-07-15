@@ -17,7 +17,7 @@ function Login() {
       const data = await res.json();
       if (res.ok) {
         alert('Login/Registration Successfully. Check your email for verification.');
-		navigate("/verifymail",{
+		navigate("/auth/verifymail",{
 			state: {
 				email : email
 			}

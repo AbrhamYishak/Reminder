@@ -19,7 +19,8 @@ function Login() {
       const data = await res.json();
       if (res.ok) {
         alert('Verfication Completed');
-		navigate("/setup",{
+		console.log(data)
+		navigate("/auth/setup",{
 			state: {
 				email : email
 			}

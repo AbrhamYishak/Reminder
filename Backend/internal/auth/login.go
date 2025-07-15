@@ -4,8 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
     "backend/db"	
-    "github.com/golang-jwt/jwt/v5"
  ) 
+
  func Login(c *gin.Context){
 	db := db.Connection()
     var loginU models.User	
@@ -20,20 +20,22 @@ import (
 	}
 	if  u.VerificationToken != HashToken(loginU.VerificationToken){
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"message":"Incorrect Token"})
+		return
 	}
-    var jwtSecret = []byte("your_jwt_secret")
-    token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-    "ID": u.ID,
-    "email":   u.Email,
-   })
-   jwtToken, err := token.SignedString(jwtSecret)
-   if err != nil {
-       c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
-   return
-   }
 	u.IsVerfied = true
 	if err := db.Save(&u).Error; err!=nil{
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error":"could not update the data"})
+		return
 	}
-   c.JSON(http.StatusOK, gin.H{"message": "User logged in successfully", "token": jwtToken})
+	token,err := getToken(u.Email)
+	if err != nil{
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not generate token"})
+		return
+	}
+	if u.TimeZone != ""{
+		c.JSON(http.StatusOK, gin.H{"message": "User logged in successfully", "token": token, "redirect": "setup"})
+		return
+	}else{
+		c.JSON(http.StatusOK, gin.H{"message": "User logged in successfully", "token": token, "redirect": "dashboard"})
+	}
  }

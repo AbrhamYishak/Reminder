@@ -19,7 +19,7 @@ func HashToken(token string) string {
 }
 func getToken(email string)(string, error){
 	var jwtKey = []byte("your_jwt_secret")
-	expirationTime := time.Now().Add(10 * time.Minute)
+	expirationTime := time.Now().AddDate(0, 6, 0)
 	claims := &Claims{
 		Email: email,
 		RegisteredClaims: jwt.RegisteredClaims{
@@ -35,6 +35,10 @@ func Register(c *gin.Context){
     var u models.User	
 	if err := c.BindJSON(&u); err!=nil{
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"message":"Faulty input"})
+		return
+	}
+	if err := db.First(&u).Error; err != nil{
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"message":"User already exists"})
 		return
 	}
 	token,err := getToken(u.Email)
