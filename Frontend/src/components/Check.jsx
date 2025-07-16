@@ -21,8 +21,7 @@ export default function Check() {
 		console.log(data)
       }
     } catch (err) {
-      console.error(err);
-      alert('An error occurred check your network');
+		navigate("/error")
     }
   };
 	useEffect(() => {
