@@ -8,6 +8,7 @@ import (
    "container/heap"
 )
 func CreateMessage(c *gin.Context){
+	id := c.GetInt64("id")
 	var m models.Message
 	db := db.Connection()
 	if err := c.BindJSON(&m); err != nil{
@@ -15,6 +16,7 @@ func CreateMessage(c *gin.Context){
 		return
 	}
 	db.AutoMigrate(&m)
+	m.UserID = id 
 	result := db.Create(&m) 
 	if result.Error != nil{
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not write the data to the database"})

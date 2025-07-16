@@ -6,10 +6,10 @@ import (
    "backend/db"	
 )
 func GetInactiveMessages(c *gin.Context){
-	email := c.GetString("email")
+	id := c.GetInt64("id")
 	db := db.Connection()
 	var m []models.InactiveMessage
-	if err := db.Where("email = ?", email).Find(&m); err != nil{
+	if err := db.Where("user_id = ?", id).Find(&m); err != nil{
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "could not retrieve the data"})
 		return
 	}

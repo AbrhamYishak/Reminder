@@ -17,7 +17,7 @@ func Register(c *gin.Context){
 	if err := db.First(&u).Error; err == nil{
 		exists = true
 	}
-	t,err := token.GetToken(u.Email)
+	t,err := token.GetToken(u.ID)
 	if err != nil{
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not generate verification token"})
 		return

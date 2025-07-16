@@ -5,7 +5,6 @@ import (
 type InactiveMessage struct{
 	ID  int64
 	Link  string
-	Email string
 	Message string
 	Time time.Time
 	UserID int64

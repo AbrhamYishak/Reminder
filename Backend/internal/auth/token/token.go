@@ -5,14 +5,14 @@ import (
 	"fmt"
 )
 type Claims struct {
-	Email string 
+	User_id int64
 	jwt.RegisteredClaims
 }
-func GetVerificationToken(email string)(string, error){
+func GetVerificationToken(user_id int64)(string, error){
 	var jwtKey = []byte("your_jwt_secret")
 	expirationTime := time.Now().Add(20 * time.Minute)
 	claims := &Claims{
-		Email: email,
+		User_id: user_id,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(expirationTime),
 		},
@@ -22,11 +22,11 @@ func GetVerificationToken(email string)(string, error){
 	return token.SignedString(jwtKey)
 }
 
-func GetToken(email string)(string, error){
+func GetToken(userID int64)(string, error){
 	var jwtKey = []byte("your_jwt_secret")
 	expirationTime := time.Now().AddDate(0, 6, 0)
 	claims := &Claims{
-		Email: email,
+		User_id : userID,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(expirationTime),
 		},
@@ -47,7 +47,7 @@ func VerifyToken(requestToken string, secret string)(bool,error){
 	}
 	return true, nil
 }
-func ExtractEmailFromToken(tokenString string, secret string) (string, error) {
+func ExtractIDFromToken(tokenString string, secret string) (int64, error) {
 	token, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
@@ -56,12 +56,12 @@ func ExtractEmailFromToken(tokenString string, secret string) (string, error) {
 	})
 
 	if err != nil {
-		return "", err
+		return 0, err
 	}
 
 	if claims, ok := token.Claims.(*Claims); ok && token.Valid {
-		return claims.Email, nil
+		return claims.User_id, nil
 	} else {
-		return "", fmt.Errorf("invalid token")
+		return 0, fmt.Errorf("invalid token")
 	}
 }

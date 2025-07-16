@@ -4,7 +4,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
    "backend/db"	
-   "fmt"
 )
 func DelMail(c *gin.Context){
 	id := c.Param("id")
@@ -17,8 +16,6 @@ func DelMail(c *gin.Context){
 	newM.Link = m.Link
     newM.Message = m.Message
 	newM.Time = m.Time
-    newM.Email = m.Email
-	fmt.Println(newM,m)
 	if err:=db.Create(&newM).Error; err!=nil{
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not transfer message to inactive message"})
 	}

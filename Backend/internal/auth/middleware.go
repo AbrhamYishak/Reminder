@@ -15,13 +15,13 @@ func JwtAuthMiddleware(secret string) gin.HandlerFunc {
 			authToken := t[1]
 			authorized, _ := token.VerifyToken(authToken, secret)
 			if authorized {
-				email, err := token.ExtractEmailFromToken(authToken, secret)
+				id, err := token.ExtractIDFromToken(authToken, secret)
 				if err != nil {
 					c.IndentedJSON(http.StatusUnauthorized, gin.H{"message":"could not extract email from token"})
 					c.Abort()
 					return
 				}
-				c.Set("email", email)
+				c.Set("id", id)
 				c.Next()
 				return
 			}

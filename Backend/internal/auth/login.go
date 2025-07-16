@@ -20,12 +20,12 @@ import (
 		return
 	}
 	var u models.User
-	email,err := token.ExtractEmailFromToken(v.Token, "your_jwt_secret")
+	id,err := token.ExtractIDFromToken(v.Token, "your_jwt_secret")
 	if err != nil{
 		c.IndentedJSON(http.StatusUnauthorized, gin.H{"message":fmt.Sprintf("invalid token during extraction %s",err)})
 		return
 	}
-	if err := db.Where("email = ?",email).First(&u).Error; err != nil{
+	if err := db.First(&u,id).Error; err != nil{
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not find a user with a given email"})
 		return
 	}
@@ -34,7 +34,7 @@ import (
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error":"could not update the data"})
 		return
 	}
-	t,err := token.GetToken(u.Email)
+	t,err := token.GetToken(u.ID)
 	if err != nil{
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not generate token"})
 		return

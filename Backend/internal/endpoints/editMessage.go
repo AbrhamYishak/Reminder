@@ -22,7 +22,6 @@ func EditMail(c *gin.Context){
 	}
 	message.Message = new_message.Message
 	message.Time = new_message.Time
-	message.Email = new_message.Email
 	message.Link = new_message.Link
 	for i, v := range *scheduler.H {
     if v.ID == message.ID {

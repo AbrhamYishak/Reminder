@@ -8,10 +8,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 func GetMessages(c *gin.Context){
-	email := c.GetString("email")
+	id := c.GetInt64("id")
 	var m []models.Message
 	db := db.Connection()
-	if err := db.Where("email = ?", email).Find(&m).Error; err != nil{
+	if err := db.Where("user_id = ?", id).Find(&m).Error; err != nil{
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "could not retrieve the data"})
 		return
 	}
