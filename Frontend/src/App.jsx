@@ -13,10 +13,9 @@ function App() {
 	<HashRouter >
 	<Routes>
 	  <Route path = "/" element = {<Check/>}/>
-	  <Route path = "/auth" element = {<Login/>}>
-	     <Route path = "verifymail" element = {<VerifyMail/>}/> 
-	     <Route path = "setup" element = {<Setup/>}/>
-	  </Route>
+	  <Route path = "/auth" element = {<Login/>}/>
+	  <Route path = "/verifymail" element = {<VerifyMail/>}/> 
+	   <Route path = "/setup" element = {<Setup/>}/>
 	  <Route path = "/dashboard" element = {<Navbar/>}>
 		<Route index element = {<ActiveMessages/>}/>
 	    <Route path = "inactive" element = {<InactiveMessage/>}/>

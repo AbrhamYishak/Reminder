@@ -4,8 +4,8 @@ import (
 	"backend/internal/endpoints"
 	"backend/internal/scheduler"
 	"backend/internal/auth"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-    "github.com/gin-contrib/cors"
 )
 func main(){
 	go scheduler.Scheduler()
@@ -21,10 +21,12 @@ func main(){
 	}))
 	router.POST("/register", auth.Register)
 	router.POST("/login", auth.Login)
-	router.POST("/setup", endpoints.SetupTime)
 	router.POST("/createMessage", endpoints.CreateMessage)
-	router.GET("/getMessages/:userid", endpoints.GetMessages)
-	router.GET("/getInactiveMessages/:userid", endpoints.GetInactiveMessages)
+	router.Use(auth.JwtAuthMiddleware("your_jwt_secret"))
+	router.GET("/checktoken", auth.CheckToken)
+	router.POST("/setup", endpoints.SetupTime)
+	router.GET("/getMessages", endpoints.GetMessages)
+	router.GET("/getInactiveMessages", endpoints.GetInactiveMessages)
 	router.PATCH("/editMessage/:id", endpoints.EditMail)
 	router.DELETE("/deleteMessage/:id", endpoints.DelMail)
 	router.Run()

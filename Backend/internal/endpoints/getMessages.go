@@ -1,15 +1,17 @@
 package endpoints
+
 import (
+	"backend/db"
 	"backend/models"
-	"github.com/gin-gonic/gin"
 	"net/http"
-   "backend/db"	
+
+	"github.com/gin-gonic/gin"
 )
 func GetMessages(c *gin.Context){
-	userid := c.Param("userid")
+	email := c.GetString("email")
 	var m []models.Message
 	db := db.Connection()
-	if err := db.Where("user_id = ?", userid).Find(&m); err != nil{
+	if err := db.Where("email = ?", email).Find(&m).Error; err != nil{
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "could not retrieve the data"})
 		return
 	}

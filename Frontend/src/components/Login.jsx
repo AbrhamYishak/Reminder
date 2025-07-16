@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {useNavigate} from 'react-router-dom'
+import { useNavigate} from 'react-router-dom'
 function Login() {
   let navigate = useNavigate()
   const [email, setemail] = useState('');
@@ -17,11 +17,7 @@ function Login() {
       const data = await res.json();
       if (res.ok) {
         alert('Login/Registration Successfully. Check your email for verification.');
-		navigate("/auth/verifymail",{
-			state: {
-				email : email
-			}
-		})
+		navigate("/verifymail")
       } else {
         alert(data.message || 'Registration failed');
       }

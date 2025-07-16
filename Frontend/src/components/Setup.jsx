@@ -1,28 +1,23 @@
 import React, {useState} from 'react'
-import {useLocation,useNavigate} from 'react-router-dom'
+import {useNavigate} from 'react-router-dom'
 function Setup() {
-  let location = useLocation()
   let navigate = useNavigate()
-  const email = location.state.email
   const [time , settime] = useState('')
+  const token = localStorage.getItem("ReminderToken")
   const handleSetup = async (e) => {
     e.preventDefault();
-
     try {
       const res = await fetch('http://localhost:8080/setup', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ "Email" : email, "TimeZone":time}),
+        headers: { 'Content-Type': 'application/json',
+		"Authorization": `Bearer ${token}`},
+        body: JSON.stringify({"TimeZone":time}),
       });
 
       const data = await res.json();
       if (res.ok) {
         alert('Setup Completed.');
-		navigate("/dashboard",{
-			state: {
-				email : email
-			}
-		})
+		navigate("/dashboard")
       } else {
         alert(data.message || 'Setup failed');
       }

@@ -2,11 +2,13 @@ import React , {useState, useEffect} from 'react'
 import Table from './Table.jsx'
 function InactiveMessage() {
   const [message_data, setmessage_data] = useState([])
+  const token = localStorage.getItem("ReminderToken")
   async function Getdata() {
     const endpoint = 'http://localhost:8080/getInactiveMessages';
     const res = await fetch(endpoint, {
       method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json',
+		"Authorization": `Bearer ${token}`},
     });
 
     if (!res.ok) {

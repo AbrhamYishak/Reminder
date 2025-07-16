@@ -6,13 +6,14 @@ import (
    "backend/db"	
 )
 func SetupTime(c *gin.Context){
+	email := c.GetString("email")
 	var m models.User
 	var time models.User
 	if err:= c.BindJSON(&time); err != nil{
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"message":"wrong input"})
 	}
 	db := db.Connection()
-	if err := db.Where("email = ?", time.Email).Find(&m).Error; err != nil{
+	if err := db.Where("email = ?", email).Find(&m).Error; err != nil{
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "could not retrieve the data"})
 		return
 	}

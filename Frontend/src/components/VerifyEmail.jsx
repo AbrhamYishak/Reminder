@@ -1,30 +1,24 @@
 import React , {useState} from 'react'
-import {useNavigate,useLocation} from 'react-router-dom'
+import {useNavigate} from 'react-router-dom'
 function Login() {
   let navigate = useNavigate()
-  let location = useLocation()
-  const email = location.state.email
   const [token, settoken] = useState('');
   const handleVerification = async (e) => {
-	console.log(email)
     e.preventDefault();
 
     try {
       const res = await fetch('http://localhost:8080/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-		  body: JSON.stringify({ "Email": email , "VerificationToken" : token}),
+		  body: JSON.stringify({"Token" : token}),
       });
 
       const data = await res.json();
       if (res.ok) {
         alert('Verfication Completed');
 		console.log(data)
-		navigate("/auth/setup",{
-			state: {
-				email : email
-			}
-		})
+		localStorage.setItem("ReminderToken",data.token)
+		navigate(data.redirect)
       } else {
         alert(data.message || 'Verification failed');
       }

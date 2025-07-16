@@ -4,32 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
     "backend/db"	
-    "github.com/golang-jwt/jwt/v5"
-	"crypto/sha256"
-	"encoding/hex"
-	"time"
+	"backend/internal/auth/token"
  )
-type Claims struct {
-	Email string 
-	jwt.RegisteredClaims
-}
-func HashToken(token string) string {
-	hash := sha256.Sum256([]byte(token)) 
-	return hex.EncodeToString(hash[:])  
-}
-func getToken(email string)(string, error){
-	var jwtKey = []byte("your_jwt_secret")
-	expirationTime := time.Now().AddDate(0, 6, 0)
-	claims := &Claims{
-		Email: email,
-		RegisteredClaims: jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(expirationTime),
-		},
-	}
-
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString(jwtKey)
-}
 func Register(c *gin.Context){
 	db := db.Connection()
     var u models.User	
@@ -37,26 +13,26 @@ func Register(c *gin.Context){
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"message":"Faulty input"})
 		return
 	}
-	if err := db.First(&u).Error; err != nil{
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"message":"User already exists"})
-		return
+	exists := false
+	if err := db.First(&u).Error; err == nil{
+		exists = true
 	}
-	token,err := getToken(u.Email)
+	t,err := token.GetToken(u.Email)
 	if err != nil{
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not generate verification token"})
 		return
 	}
-	if err := SendVerificationMail(token,[]string{u.Email}); err!=nil{
+	if err := SendVerificationMail(t,[]string{u.Email}); err!=nil{
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not send the verification token"})
 		return
 	}
-	u.VerificationToken = HashToken(token)
-	db.AutoMigrate(&u)
-	if err := db.Create(&u).Error; err!=nil{
+	if !exists{
+		db.AutoMigrate(&u)
+    	if err := db.Create(&u).Error; err!=nil{
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not write the data to the database"})
 		return
 	}
-
+}
 	c.IndentedJSON(http.StatusOK, gin.H{"message":"succesfully created the user"})	
 
 }
