@@ -17,7 +17,12 @@ function Setup() {
       const data = await res.json();
       if (res.ok) {
         alert('Setup Completed.');
-		navigate("/dashboard")
+        window.location.href = chrome.runtime.getURL('popup.html');
+        chrome.tabs.getCurrent((tab) => {
+        if (tab && tab.id) {
+        chrome.tabs.remove(tab.id);
+        }
+        });
       } else {
         alert(data.message || 'Setup failed');
       }

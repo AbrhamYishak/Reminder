@@ -17,7 +17,9 @@ export default function Check() {
 		navigate("/dashboard")
 		console.log(data)
       } else {
-		navigate("/auth")
+    chrome.tabs.create({
+    url: chrome.runtime.getURL("auth.html"),
+   });
 		console.log(data)
       }
     } catch (err) {
