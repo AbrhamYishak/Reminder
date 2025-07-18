@@ -18,7 +18,18 @@ document.getElementById('verifyForm').addEventListener('submit', async function 
       if (data.redirect === "/setup") {
         window.location.href = chrome.runtime.getURL("setup.html");
       } else {
-        window.location.href = chrome.runtime.getURL("index.html");
+      const popupUrl = chrome.runtime.getURL('index.html');
+
+      window.location.href = popupUrl;
+
+      if (chrome.tabs && chrome.tabs.query) {
+        chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+          if (tabs[0] && tabs[0].id) {
+            chrome.tabs.remove(tabs[0].id);
+          }
+        });
+     }
+	 alert("Open the Extension")
       }
     } else {
       alert(data.message || 'Verification failed');
