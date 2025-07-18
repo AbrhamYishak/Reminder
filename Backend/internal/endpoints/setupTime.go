@@ -4,20 +4,23 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
    "backend/db"	
+   "fmt"
 )
 func SetupTime(c *gin.Context){
-	email := c.GetString("email")
+	db := db.Connection()
+	id := c.GetInt64("id")
+	fmt.Println(id)
 	var m models.User
 	var time models.User
 	if err:= c.BindJSON(&time); err != nil{
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"message":"wrong input"})
 	}
-	db := db.Connection()
-	if err := db.Where("email = ?", email).Find(&m).Error; err != nil{
+	if err := db.Where("id = ?", id).First(&m).Error; err != nil{
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "could not retrieve the data"})
 		return
 	}
 	m.TimeZone = time.TimeZone
+	fmt.Println(m,time)
 	if err := db.Save(&m).Error; err!= nil{
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not update the data"})
 	}

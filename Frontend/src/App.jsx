@@ -3,9 +3,6 @@ import ActiveMessages from "./components/ActiveMessages.jsx"
 import Navbar from "./components/Navbar.jsx"
 import InactiveMessage from './components/InactiveMessage.jsx'
 import Setting from './components/Setting.jsx'
-import Login from './components/Login.jsx'
-import VerifyMail from './components/VerifyEmail.jsx'
-import Setup from './components/Setup.jsx'
 import Check from './components/Check.jsx'
 import ErrorTv from './components/ErrorTv.jsx'
 function App() {
@@ -14,10 +11,7 @@ function App() {
 	<HashRouter >
 	<Routes>
 	  <Route path = "/" element = {<Check/>}/>
-	  <Route path = "/auth" element = {<Login/>}/>
 	  <Route path = "/error" element = {<ErrorTv/>}/>
-	  <Route path = "/verifymail" element = {<VerifyMail/>}/> 
-	   <Route path = "/setup" element = {<Setup/>}/>
 	  <Route path = "/dashboard" element = {<Navbar/>}>
 		<Route index element = {<ActiveMessages/>}/>
 	    <Route path = "inactive" element = {<InactiveMessage/>}/>

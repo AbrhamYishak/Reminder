@@ -1,4 +1,7 @@
 package models
+import (
+	"time"
+)
 type User struct{
 	ID int64
 	Email string
@@ -6,5 +9,7 @@ type User struct{
 	IsVerfied bool
     Message []Message
 	InactiveMessage []InactiveMessage
+	CreatedAt time.Time
+	UpdatedAt time.Time
 }
 

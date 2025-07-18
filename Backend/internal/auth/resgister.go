@@ -14,10 +14,17 @@ func Register(c *gin.Context){
 		return
 	}
 	exists := false
-	if err := db.First(&u).Error; err == nil{
+	if err := db.Where("email = ?",u.Email).First(&u).Error; err == nil{
 		exists = true
 	}
-	t,err := token.GetToken(u.ID)
+	if !exists{
+		db.AutoMigrate(&u)
+    	if err := db.Create(&u).Error; err!=nil{
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not write the data to the database"})
+		return
+	    }
+	}
+	t,err := token.GetVerificationToken(u.ID)
 	if err != nil{
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not generate verification token"})
 		return
@@ -26,13 +33,6 @@ func Register(c *gin.Context){
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not send the verification token"})
 		return
 	}
-	if !exists{
-		db.AutoMigrate(&u)
-    	if err := db.Create(&u).Error; err!=nil{
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not write the data to the database"})
-		return
-	}
-}
 	c.IndentedJSON(http.StatusOK, gin.H{"message":"succesfully created the user"})	
-
 }
+

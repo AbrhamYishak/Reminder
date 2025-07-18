@@ -13,7 +13,7 @@
 		"activeTab"
 	],
 	"web_accessible_resources": [{
-		"resources": ["fonts/OpenDyslexic3-Regular.woff2"],
+		"resources": ["auth.html","login.html","setup.html"],
 		"matches": ["<all_urls>"]
 	}
 	],
