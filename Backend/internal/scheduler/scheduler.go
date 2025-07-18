@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"sync"
 	"time"
-	"strings"
 	"backend/internal"
 )
 var HLock sync.Mutex
@@ -48,12 +47,14 @@ var Change = make(chan time.Duration)
 					HLock.Unlock()
 				}else{
 					if err := db.First(&u,message.UserID).Error; err!=nil{
-					fmt.Println("could not find the message with the given id")
+					fmt.Println("could not find the user with the given id")
 					HLock.Unlock()
 					}
                  HLock.Unlock()
                  fmt.Println("Sending email to:", u.Email)
-				 if err:= internal.SendMail(message.Message, strings.Split(u.Email, " ")); err != nil{
+				 l := fmt.Sprintf("Link : %v", message.Link) 
+				 m := fmt.Sprintf("Message : %v", message.Message)
+				 if err:= internal.SendMail(m,l, u.Email); err != nil{
 					 fmt.Println("could not send the email due to invalid email or internet connection")
 					 continue
 				 }

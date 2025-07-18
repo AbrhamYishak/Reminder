@@ -44,7 +44,7 @@ function Table({datas}) {
 					{data.ID}
                 </th>
                 <td class="px-6 py-4 max-w-1/6 break-words">
-					{data.Email}
+					{data.Link}
                 </td>
                 <td class="px-6 py-4 max-w-3/6 break-words">
 					{data.Message}

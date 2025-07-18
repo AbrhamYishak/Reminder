@@ -1,5 +1,6 @@
-import React , {useState} from 'react'
+import React , {useState,useContext} from 'react'
 import { X } from 'lucide-react';
+import {OpenContext} from './MyContext.jsx'
 function Newreminder() {
   const [link,setlink] = useState("")
   const [hour, sethour] = useState("")
@@ -7,15 +8,15 @@ function Newreminder() {
   const [message, setmessage] = useState("")
   const [t, sett] = useState("AM")
   const token = localStorage.getItem("ReminderToken")
-  console.log(hour)
-  console.log(t)
-  console.log(d)
+  const { open, setOpen } = useContext(OpenContext); 
+  console.log(open)
 	chrome.tabs.query({ active: true, currentWindow: true }, (tabs)=>{
     const currentTab = tabs[0];
     const url = currentTab.url;
     setlink(url)
    });
   async function Getdata() {
+	setOpen(!open)
     const endpoint = 'http://localhost:8080/createMessage';
     const res = await fetch(endpoint, {
       method: 'POST',
@@ -36,7 +37,7 @@ function Newreminder() {
   return (
   <div className="fixed w-full max-w-[300px] bg-white rounded-lg shadow-md p-6 z-10 top-1/6">
 	<div className="flex flex-col text-red-500">
-	  <button type="button" className="self-end"><X/></button>
+	  <button type="button" className="self-end" onClick={() => setOpen(!open)}><X/></button>
 	  </div>
     <h2 className="text-2xl font-bold text-gray-800 mb-4">New Reminder</h2>
     <form className="flex flex-col">

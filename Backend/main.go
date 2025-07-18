@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 func main(){
+	scheduler.Loader()
 	go scheduler.Scheduler()
 	router := gin.Default()
 
