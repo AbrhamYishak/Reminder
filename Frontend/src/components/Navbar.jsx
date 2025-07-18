@@ -1,6 +1,6 @@
 import {Outlet, Link} from "react-router-dom";
 import { MessageSquareText } from 'lucide-react';
-import { MessageSquareX } from 'lucide-react';
+import { History } from 'lucide-react';
 import { Settings } from 'lucide-react';
 function Nav() {
   return (
@@ -15,8 +15,8 @@ function Nav() {
     </div>
     <div class="group relative px-4 cursor-pointer">
       <div class="flex h-10 items-center gap-1 justify-center rounded-full hover:text-blue-500">
-	     <MessageSquareX/>
-         <Link to = "/dashboard/inactive"><p className="text-lg">Inactive</p></Link>
+	     <History/>
+         <Link to = "/dashboard/inactive"><p className="text-lg">History</p></Link>
       </div>
 </div>
 <div class="group relative px-4 cursor-pointer">
