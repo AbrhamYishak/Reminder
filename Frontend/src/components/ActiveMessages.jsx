@@ -3,7 +3,7 @@ import Newreminder from './Newreminder.jsx'
 import Table from './Table.jsx'
 function ActiveMessages()
 {
-  const [add, setadd] = useState(false)
+  const [add, setadd] = useState(true)
   const [message_data, setmessage_data] = useState([])
   const token = localStorage.getItem("ReminderToken")
   async function Getdata() {
