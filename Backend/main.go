@@ -25,6 +25,7 @@ func main(){
 	router.Use(auth.JwtAuthMiddleware("your_jwt_secret"))
 	router.POST("/createMessage", endpoints.CreateMessage)
 	router.GET("/checktoken", auth.CheckToken)
+	router.POST("/getAiMessage", endpoints.GetAiMessage)
 	router.POST("/setup", endpoints.SetupTime)
 	router.GET("/getMessages", endpoints.GetMessages)
 	router.GET("/getInactiveMessages", endpoints.GetInactiveMessages)

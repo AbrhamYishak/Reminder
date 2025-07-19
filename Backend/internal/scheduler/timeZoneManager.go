@@ -1,6 +1,5 @@
 package scheduler
 import (
-	"fmt"
 	"strings"
 	"time"
 )
@@ -20,9 +19,7 @@ func TimeZoneManager(timezone string, hour string, date string, meridiem string)
 	layout = "2006-01-02T15:04:05"
 	finalTime, err := time.ParseInLocation(layout,date, loc)
 	if err != nil {
-		fmt.Println("Error parsing time:", err)
 		return time.Now(),err
 	}
-	fmt.Println(finalTime)
 	return finalTime,nil
 }

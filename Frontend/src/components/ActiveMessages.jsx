@@ -25,7 +25,7 @@ function ActiveMessages()
   }
   useEffect(() => {
      Getdata()
-  }, [])  
+  }, [open])  
    return (
     <div className="flex flex-col gap-3 justify-center items-center">
       <Table datas = {message_data}/>
