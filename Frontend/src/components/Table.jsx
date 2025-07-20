@@ -1,77 +1,76 @@
-function Table({datas}) {
- const handleDelete = async (id) => {
+import React, {useContext} from 'react'
+import { Expand } from 'lucide-react';
+import { Pencil } from 'lucide-react';
+import { Check } from 'lucide-react';
+import { Trash } from 'lucide-react';
+import {OpenContext} from './MyContext.jsx'
+function Table({ datas }) {
+  const token = localStorage.getItem("ReminderToken")
+  const handleDelete = async (id) => {
     try {
       const response = await fetch(`http://localhost:8080/deleteMessage/${id}`, {
-        method: 'DELETE'
-      });
-      if (!response.ok) {
-        throw new Error('Delete failed');
-      }
-
-      setItems(items.filter(item => item.id !== id));
+        method: 'DELETE',
+      headers: { 'Content-Type': 'application/json',
+		"Authorization": `Bearer ${token}`},
+    });
+      if (!response.ok) throw new Error('Delete failed');
       console.log(`Deleted item with id ${id}`);
     } catch (err) {
       console.error(err);
     }
-  }
+  };
+
   return (
-    <div>
-<div class="relative overflow-x-auto overflow-y-scroll h-[70vh] shadow-md sm:rounded-lg w-full m-3">
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 table-fixed">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+    <div className="w-full p-3">
+      <div className="h-[70vh] shadow-md sm:rounded-lg w-full overflow-y-scroll">
+        <table className="table-fixed w-full text-sm text-left text-gray-500 dark:text-gray-400 border-collapse">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-                <th scope="col" class="px-6 py-3">
-                    Id
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Link
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Message
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Time
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Action
-                </th>
+              <th className="w-[5%] px-2 py-3">Id</th>
+              <th className="w-[25%] px-2 py-3">Link</th>
+              <th className="w-[40%] px-2 py-3">Message</th>
+              <th className="w-[15%] px-2 py-3">Time</th>
+              <th className="w-[15%] px-2 py-3">Action</th>
             </tr>
-        </thead>
-        <tbody>
-	     {datas.map(data => (
-			  <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-					{data.ID}
-                </th>
-                <td class="px-6 py-4 max-w-1/6 break-words">
-					{data.Link}
+          </thead>
+          <tbody>
+            {datas.map((data) => (
+              <tr key={data.ID} className="odd:bg-white even:bg-gray-50 dark:odd:bg-gray-900 dark:even:bg-gray-800 border-b dark:border-gray-700">
+                <td className="px-2 py-2 font-medium text-gray-900 dark:text-white truncate whitespace-nowrap">
+                  {data.ID}
                 </td>
-                <td class="px-6 py-4 max-w-3/6 break-words">
-					{data.Message}
+                <td className="px-2 py-2 truncate whitespace-nowrap overflow-hidden text-ellipsis" title={data.Link}>
+                  {data.Link}
                 </td>
-                <td class="px-6 py-4 max-w-1/6 break-words">
-					{data.Time}
+                <td className="px-2 py-2 truncate whitespace-nowrap overflow-hidden text-ellipsis" title={data.Message}>
+                  {data.Message}
                 </td>
-                <td class="px-6 py-4">
-				<div class="flex flex-col shadow-xs" role="group">
-  <button type="button" class="px-2 py-1 text-sm font-medium text-gray-900 bg-white border border-gray-200 hover:bg-gray-100 hover:text-green-700 focus:z-10 focus:ring-2 focus:ring-green-700 focus:text-green-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-green-500 dark:focus:text-white">
-    Completed
-  </button>
-  <button type="button" class="px-2 py-1 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-red-700 focus:z-10 focus:ring-2 focus:ring-red-700 focus:text-red-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-red-500 dark:focus:text-white"onClick = {() => handleDelete(data.ID)}>
-    Delete
-  </button>
-  <button type="button" class="px-2 py-1 text-sm font-medium text-gray-900 bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
-    Edit
-  </button>
-</div>
+                <td className="px-2 py-2 truncate whitespace-nowrap" title={data.Time}>
+                  {data.Time}
                 </td>
-            </tr>
-		 ))}
-        </tbody>
-    </table>
-</div>
-	  </div>
-  )
+                <td className="px-2 py-2">
+                  <div className="flex flex-col gap-1 justify-center items-center">
+                    <button className="truncate text-[0.25rem] bg-white border border-gray-200 hover:bg-gray-100 hover:text-green-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700">
+                      <Check/>
+                    </button>
+                    <button onClick={() => handleDelete(data.ID)} className="truncate text-[0.25rem] bg-white border border-gray-200 hover:bg-gray-100 hover:text-red-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700">
+                      <Trash/>
+                    </button>
+                    <button className="truncate text-[0.25rem] bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700">
+                      <Pencil/>
+                    </button>
+                    <button className="truncate text-[0.25rem] p-1 bg-white border border-gray-200 hover:bg-gray-100 hover:text-amber-300 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700">
+                      <Expand/>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
 }
 
-export default Table
+export default Table;

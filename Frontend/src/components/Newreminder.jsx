@@ -26,12 +26,11 @@ function Newreminder() {
     });
 
     if (!res.ok) {
-      console.error('Failed to fetch data');
+      alert('Failed to fetch data');
       return;
     }
 
     const data = await res.json();
-    console.log('Received data:', data);
     setmessage_data(data)
   }
 
@@ -62,7 +61,7 @@ function Newreminder() {
 	   });
 
 	   if (!res.ok) {
-	     console.error('Could not Generate Message');
+	     alert('Could not Generate Message');
 	     return;
 	   }
 
@@ -99,7 +98,7 @@ function Newreminder() {
     title="payment"
 	onClick = {HandleAi}
 	  >
-    Generate Message<svg
+    Generate Message With Ai<svg
       aria-hidden="true"
       viewBox="0 0 10 10"
       height="10"

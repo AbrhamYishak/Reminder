@@ -1,5 +1,5 @@
 import React , {useState, useEffect} from 'react'
-import Table from './Table.jsx'
+import InTable from './InTable.jsx'
 function InactiveMessage() {
   const [message_data, setmessage_data] = useState([])
   const token = localStorage.getItem("ReminderToken")
@@ -26,7 +26,7 @@ function InactiveMessage() {
   
    return (
     <div className="flex flex-col gap-3 justify-center items-center">
-      <Table datas = {message_data}/>
+      <InTable datas = {message_data}/>
     </div>
   )
 }
