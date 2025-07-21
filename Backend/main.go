@@ -22,6 +22,7 @@ func main(){
 	}))
 	router.POST("/register", auth.Register)
 	router.POST("/login", auth.Login)
+	router.POST("/loginwithgoogle", auth.LoginWithGoogle)
 	router.Use(auth.JwtAuthMiddleware("your_jwt_secret"))
 	router.POST("/createMessage", endpoints.CreateMessage)
 	router.GET("/checktoken", auth.CheckToken)
