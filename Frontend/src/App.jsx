@@ -9,7 +9,7 @@ import { OpenProvider } from './components/MyContext.jsx';
 
 function App() {
   return (
-    <div className="flex flex-col m-1 min-w-[600px]">
+    <div className="flex flex-col m-1 min-w-[460px]">
       <HashRouter>
         <OpenProvider>
           <Routes>

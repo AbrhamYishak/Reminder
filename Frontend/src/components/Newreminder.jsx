@@ -16,7 +16,7 @@ function Newreminder() {
     setlink(url)
    });
   async function Getdata() {
-	setOpen(!open)
+    setOpen(prev => !prev)
     const endpoint = 'http://localhost:8080/createMessage';
     const res = await fetch(endpoint, {
       method: 'POST',
@@ -71,7 +71,7 @@ function Newreminder() {
   return (
   <div className="fixed w-full max-w-[300px] bg-white rounded-lg shadow-md p-6 z-10 top-1/6">
 	<div className="flex flex-col text-red-500">
-	  <button type="button" className="self-end" onClick={() => setOpen(!open)}><X/></button>
+	  <button type="button" className="self-end" onClick={()=>setOpen(prev => !prev)}><X/></button>
 	  </div>
     <h2 className="text-2xl font-bold text-gray-800 mb-4">New Reminder</h2>
     <form className="flex flex-col">

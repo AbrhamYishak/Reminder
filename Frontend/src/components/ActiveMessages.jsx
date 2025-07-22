@@ -27,14 +27,14 @@ function ActiveMessages()
      Getdata()
   }, [open])  
    return (
-    <div className="flex flex-col gap-3 justify-center items-center">
+    <div className="flex flex-col gap-1 justify-center items-center">
       <Table datas = {message_data}/>
       <button
         type="button"
         className="cursor-pointer transition-all bg-green-500 text-white px-6 py-2 rounded-lg border-green-600 border-b-[4px]
                    hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px]
                    active:border-b-[2px] active:brightness-90 active:translate-y-[2px]"
-	    onClick = {()=> setOpen(!open)}
+	    onClick = {()=> setOpen(prev => !prev)}
       >
         + Add Reminder
       </button>

@@ -12,14 +12,14 @@ function InTable({ datas }) {
   };
 
   return (
-    <div className="w-full p-3">
+    <div className="w-full p-1">
       <div className="h-[70vh] shadow-md sm:rounded-lg w-full overflow-y-scroll">
         <table className="table-fixed w-full text-sm text-left text-gray-500 dark:text-gray-400 border-collapse">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-              <th className="w-[5%] px-2 py-3">Id</th>
+              <th className="w-[10%] px-2 py-3">Id</th>
               <th className="w-[25%] px-2 py-3">Link</th>
-              <th className="w-[50%] px-2 py-3">Message</th>
+              <th className="w-[45%] px-2 py-3">Message</th>
               <th className="w-[20%] px-2 py-3">Time</th>
             </tr>
           </thead>

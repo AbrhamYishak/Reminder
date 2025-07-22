@@ -1,7 +1,7 @@
 function Setting() {
   return (
     <div className="flex flex-col justify-center items-center min-h-[50vh] p-4">
-      <div className="w-full max-w-md bg-white p-6 rounded-lg shadow-lg border border-gray-200">
+      <div className="w-3/4 max-w-md bg-white p-6 rounded-lg shadow-lg border border-gray-200">
         <div className="space-y-3 text-center flex flex-col gap-3">
               <label
                 className=" self-start text-lg font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -40,14 +40,13 @@ function Setting() {
                   </select>
             </div>
 
-            <div className="flex items-center space-x-2">
-              <hr className="flex-grow border-zinc-200 dark:border-zinc-700" />
+            <div className="flex items-center space-x-2 w-1/2">
               <hr className="flex-grow border-zinc-200 dark:border-zinc-700" />
             </div>
 
             <button
               type="button"
-              className="inline-flex  self-center items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full bg-[#4285F4] text-white"
+              className="inline-flex  self-start items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 bg-[#4285F4] text-white"
 	          onClick={()=>localStorage.clear}
             >
               <div className="flex items-center justify-center">Log Out</div>
