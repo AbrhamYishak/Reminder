@@ -9,6 +9,7 @@ type User struct{
 	IsVerfied bool
     Message []Message
 	InactiveMessage []InactiveMessage
+	SessionID string
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }

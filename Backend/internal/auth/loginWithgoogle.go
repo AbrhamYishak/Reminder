@@ -18,11 +18,9 @@ func LoginWithGoogle(c *gin.Context){
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"message":"wrong format"})
 		fmt.Println(err)
 	}
-	fmt.Println(g.Email)
 	var u models.User
 	u.Email = g.Email
 	u.IsVerfied = true	
-	fmt.Println(u)
 	exists := false
 	if err := db.Where("email = ?",u.Email).First(&u).Error; err == nil{
 		exists = true
@@ -34,17 +32,17 @@ func LoginWithGoogle(c *gin.Context){
 		return
 	    }
 	}
-	t,err:=token.GetToken(u.ID) 
-	if err != nil{
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not generate token"})	
-		fmt.Println(err)
-		return
-	}
 	if u.TimeZone == ""{
+        t,err:=token.GetSetupToken(u.ID)
+	    if err != nil{
+		    c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not generate token"})	
+		    fmt.Println(err)
+		    return
+	     }
 		c.JSON(http.StatusOK, gin.H{"message": "User logged in successfully", "token": t, "redirect": "/setup"})
 		return
 	}else{
-		c.JSON(http.StatusOK, gin.H{"message": "User logged in successfully", "token": t, "redirect": "/dashboard"})
+		c.JSON(http.StatusOK, gin.H{"message": "User logged in successfully", "redirect": "/dashboard"})
 	}
 
 }

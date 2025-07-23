@@ -5,24 +5,30 @@ import (
 	"net/http"
    "backend/db"	
    "fmt"
+   "backend/internal/auth/token"
 )
 func SetupTime(c *gin.Context){
 	db := db.Connection()
 	id := c.GetInt64("id")
 	fmt.Println(id)
-	var m models.User
+	var u models.User
 	var time models.User
 	if err:= c.BindJSON(&time); err != nil{
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"message":"wrong input"})
 	}
-	if err := db.Where("id = ?", id).First(&m).Error; err != nil{
+	if err := db.Where("id = ?", id).First(&u).Error; err != nil{
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "could not retrieve the data"})
 		return
 	}
-	m.TimeZone = time.TimeZone
-	fmt.Println(m,time)
-	if err := db.Save(&m).Error; err!= nil{
+	u.TimeZone = time.TimeZone
+	if err := db.Save(&u).Error; err!= nil{
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not update the data"})
+		return
 	}
-	c.IndentedJSON(http.StatusOK, gin.H{"message":"setup completed"})
+	t,err := token.GetToken(u.ID,u.SessionID)
+	if err != nil{
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not generate token"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "User logged in successfully", "token": t})
 }

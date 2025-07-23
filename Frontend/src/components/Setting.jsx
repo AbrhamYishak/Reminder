@@ -1,4 +1,24 @@
+import React , {useState} from 'react'
 function Setting() {
+	const [time, settime] = useState("")
+    const token = localStorage.getItem("ReminderToken");
+    async function Setuptime(t) {
+    const endpoint = 'http://localhost:8080/setup';
+	console.log(t)
+    const res = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json',
+		"Authorization": `Bearer ${token}`},
+		body: JSON.stringify({TimeZone:t}),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      alert(data.message || 'Setup failed');
+      return;
+    }else{
+	  alert("Succesfully changed time")
+	}
+  }
   return (
     <div className="flex flex-col justify-center items-center min-h-[50vh] p-4">
       <div className="w-3/4 max-w-md bg-white p-6 rounded-lg shadow-lg border border-gray-200">
@@ -11,7 +31,14 @@ function Setting() {
               </label>
               <div className="max-w-xs text-gray-500 flex flex-col gap-3">
                 <div className="inset-y-0 my-auto flex items-center">
-                  <select className="text-md outline-none rounded-md py-2 px-3 h-full" >
+					<select
+						className="text-md outline-none rounded-md py-2 px-3 h-full"
+						value={time}
+						onChange={(e)=>{
+						const newTime = e.target.value;
+						settime(newTime);
+						Setuptime(newTime);
+					}}>
                     <option value="UTC-12:00"> (BIT) UTC-12:00</option>
                     <option value="UTC-11:00"> (NST) UTC-11:00</option>
                     <option value="UTC-10:00"> (HST) UTC-10:00</option>
@@ -24,7 +51,7 @@ function Setting() {
                     <option value="UTC-03:00"> (ART) UTC-03:00</option>
                     <option value="UTC-02:00"> (GST) UTC-02:00</option>
                     <option value="UTC-01:00"> (CVT) UTC-01:00</option>
-                    <option value="UTC±00:00"> (GMT) UTC±00:00</option>
+                    <option value="UTC+00:00"> (GMT) UTC+00:00</option>
                     <option value="UTC+01:00"> (CET) UTC+01:00</option>
                     <option value="UTC+02:00"> (EET) UTC+02:00</option>
                     <option value="UTC+03:00"> (EAT) UTC+03:00</option>

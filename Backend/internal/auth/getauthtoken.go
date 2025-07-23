@@ -8,7 +8,7 @@ import (
     "fmt"
 	"github.com/gin-gonic/gin"
 ) 
- func Verify(c *gin.Context){
+ func GetAuthToken(c *gin.Context){
 	db := db.Connection()
 	t := c.Param("token")
 	fmt.Println(t)
@@ -31,4 +31,10 @@ import (
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error":"could not update the data"})
 		return
 	}
+	t,err = token.GetToken(u.ID,u.SessionID)
+	if err != nil{
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not generate token"})
+		return
+	}
+	c.IndentedJSON(http.StatusOK, gin.H{"message": "User logged in successfully", "token": t})
  }

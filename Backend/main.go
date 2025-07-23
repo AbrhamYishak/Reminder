@@ -1,9 +1,9 @@
 package main
 
 import (
-	"backend/internal/endpoints"
-	"backend/internal/scheduler"
 	"backend/internal/auth"
+	"backend/internal/scheduler"
+	"backend/internal/endpoints"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
@@ -18,12 +18,15 @@ func main(){
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS","PATCH"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
-		AllowCredentials: true,
 	}))
 	router.POST("/register", auth.Register)
-	router.POST("/login", auth.Login)
 	router.POST("/loginwithgoogle", auth.LoginWithGoogle)
+	router.GET("/verify/:token", auth.Verify)
+	router.Use(auth.JwtSetupAuthMiddleware("your_jwt_secret"))
+	router.POST("/setupbefore", endpoints.SetupTime)
+	router.POST("/getauthtoken", auth.GetAuthToken)
 	router.Use(auth.JwtAuthMiddleware("your_jwt_secret"))
+	router.POST("/logout", auth.Logout)
 	router.POST("/createMessage", endpoints.CreateMessage)
 	router.GET("/checktoken", auth.CheckToken)
 	router.POST("/getAiMessage", endpoints.GetAiMessage)

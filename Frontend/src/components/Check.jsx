@@ -4,7 +4,37 @@ import { useNavigate } from 'react-router-dom';
 export default function Check() {
     const token = localStorage.getItem('ReminderToken');
 	let navigate = useNavigate()
-    const handleCheck = async () => {
+	if (token === null){
+		const setuptoken = localStorage.getItem("ReminderSetupToken")
+		if (setuptoken !== null){
+			const handleVerification = async () => {
+				try {
+				const res = await fetch('http://localhost:8080/getauthtoken', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json',
+					"Authorization": `Bearer ${setuptoken}`},
+				});
+				const data = await res.json();
+				if (res.ok) {
+				navigate("/dashboard")
+				} else {
+				chrome.tabs.create({
+				url: chrome.runtime.getURL("auth.html"),
+				});
+				return
+				}
+				} catch (err) {
+				navigate("/error")
+				}
+				};
+			handleVerification()
+		}else{
+			chrome.tabs.create({
+			url: chrome.runtime.getURL("auth.html"),
+			});
+		}
+    }
+	const handleCheck = async () => {
     try {
       const res = await fetch('http://localhost:8080/checktoken', {
         method: 'GET',
@@ -13,6 +43,8 @@ export default function Check() {
       });
 
       const data = await res.json();
+	  console.log(res)
+	  console.log(data)
       if (res.ok) {
 		navigate("/dashboard")
 		console.log(data)
@@ -26,8 +58,4 @@ export default function Check() {
 		navigate("/error")
     }
   };
-	useEffect(() => {
-	 handleCheck() 
-	}, [])
-	
 }

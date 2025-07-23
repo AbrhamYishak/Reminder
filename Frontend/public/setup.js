@@ -1,11 +1,10 @@
-document.getElementById('setupForm').addEventListener('submit', async function (e) {
+document.getElementById('setupForm').addEventListener('submit', async (e) => {
   e.preventDefault();
 
   const timezone = document.getElementById('timezone').value;
-  const token = localStorage.getItem("ReminderToken");
-
+  const token = localStorage.getItem("ReminderSetupToken");
   try {
-    const res = await fetch('http://localhost:8080/setup', {
+    const res = await fetch('http://localhost:8080/setupbefore', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -16,20 +15,9 @@ document.getElementById('setupForm').addEventListener('submit', async function (
 
     const data = await res.json();
     if (res.ok) {
+      localStorage.setItem("ReminderToken", data.token);
       alert('Setup Completed.');
-
-      const popupUrl = chrome.runtime.getURL('index.html');
-
-      window.location.href = popupUrl;
-
-      if (chrome.tabs && chrome.tabs.query) {
-        chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-          if (tabs[0] && tabs[0].id) {
-            chrome.tabs.remove(tabs[0].id);
-          }
-        });
-     }
-	 alert("Open the Extension")
+	  alert("Open the Extension")
     } else {
       alert(data.message || 'Setup failed');
     }

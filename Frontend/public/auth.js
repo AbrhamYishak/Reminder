@@ -16,15 +16,6 @@ async function send(userData) {
         if (data.redirect === "/setup") {
         window.location.href = chrome.runtime.getURL("setup.html");
         } else {
-      const popupUrl = chrome.runtime.getURL('index.html');
-      window.location.href = popupUrl;
-      if (chrome.tabs && chrome.tabs.query) {
-        chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-          if (tabs[0] && tabs[0].id) {
-            chrome.tabs.remove(tabs[0].id);
-          }
-        });
-     }
 	 alert("Open the Extension")
     } 
 	}else {
@@ -54,15 +45,14 @@ document.getElementById("loginWithgoogle").addEventListener("click", () => {
       .catch(err => console.error("Fetch failed:", err));
   });
 });
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded',()=> {
   const loginForm = document.getElementById('loginForm');
 
   if (loginForm) {
-    loginForm.addEventListener('submit', async function (e) {
+    loginForm.addEventListener('submit', async (e)=> {
       e.preventDefault();
 
       const email = document.getElementById('email').value;
-
       try {
         const res = await fetch('http://localhost:8080/register', {
           method: 'POST',
@@ -74,13 +64,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const data = await res.json();
         if (res.ok) {
-          alert('Login/Registration Successful. Check your email for verification.');
-          window.location.href = "login.html";
+          alert('Login/Registration Successful. Check your email for verification.');  
+		  localStorage.setItem("ReminderSetupToken", data.token);
+		  if (data.redirect === "/setup"){
+            window.location.href = "setup.html";
+			}else{
+            alert("Verify your email and open extension")
+		  }
         } else {
           alert(data.message || 'Registration failed');
         }
       } catch (err) {
-        console.error(err);
         alert('An error occurred. Please check your network.');
       }
     });
