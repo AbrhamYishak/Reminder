@@ -11,12 +11,13 @@ async function send(userData) {
 
     const data = await res.json();
     if (res.ok) {
-		localStorage.setItem("ReminderToken", data.token);
         alert('Login/Registration Successful. Check your email for verification.');
         if (data.redirect === "/setup") {
-        window.location.href = chrome.runtime.getURL("setup.html");
+			localStorage.setItem("ReminderSetupToken", data.token);
+            window.location.href = chrome.runtime.getURL("setup.html");
         } else {
-	 alert("Open the Extension")
+			localStorage.setItem("ReminderToken", data.token);
+			alert("Open the Extension")
     } 
 	}else {
       console.error(" Backend error:", data);

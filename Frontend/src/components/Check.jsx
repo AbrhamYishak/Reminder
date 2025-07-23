@@ -2,7 +2,7 @@ import React, {useEffect} from 'react'
 import { useNavigate } from 'react-router-dom';
 
 export default function Check() {
-    const token = localStorage.getItem('ReminderToken');
+    const token = localStorage.getItem("ReminderToken");
 	let navigate = useNavigate()
 	if (token === null){
 		const setuptoken = localStorage.getItem("ReminderSetupToken")
@@ -17,6 +17,7 @@ export default function Check() {
 				const data = await res.json();
 				if (res.ok) {
 				navigate("/dashboard")
+                localStorage.setItem("ReminderToken", data.token);
 				} else {
 				chrome.tabs.create({
 				url: chrome.runtime.getURL("auth.html"),
@@ -58,4 +59,8 @@ export default function Check() {
 		navigate("/error")
     }
   };
+  useEffect(() => {
+   handleCheck()
+  }, [])
 }
+  

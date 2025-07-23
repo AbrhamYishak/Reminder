@@ -31,4 +31,5 @@ import (
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error":"could not update the data"})
 		return
 	}
+	c.IndentedJSON(http.StatusOK, gin.H{"message":"succesfully verified"})
  }

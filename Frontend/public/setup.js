@@ -4,6 +4,7 @@ document.getElementById('setupForm').addEventListener('submit', async (e) => {
   const timezone = document.getElementById('timezone').value;
   const token = localStorage.getItem("ReminderSetupToken");
   try {
+    console.log(token)
     const res = await fetch('http://localhost:8080/setupbefore', {
       method: 'POST',
       headers: {
