@@ -5,8 +5,13 @@ export default function Check() {
     const token = localStorage.getItem("ReminderToken");
 	let navigate = useNavigate()
 	if (token === null){
-		const setuptoken = localStorage.getItem("ReminderSetupToken")
-		if (setuptoken !== null){
+		const setuptoken = localStorage.getItem("ReminderSetupToken");
+		console.log(setuptoken)
+		if (setuptoken === null){
+			chrome.tabs.create({
+			url: chrome.runtime.getURL("auth.html"),
+			});
+		}else{
 			const handleVerification = async () => {
 				try {
 				const res = await fetch('http://localhost:8080/getauthtoken', {
@@ -19,9 +24,15 @@ export default function Check() {
 				navigate("/dashboard")
                 localStorage.setItem("ReminderToken", data.token);
 				} else {
-				chrome.tabs.create({
-				url: chrome.runtime.getURL("auth.html"),
-				});
+				if (data.message === "not verified") {
+					navigate("/verify")
+				}
+			    else{
+					chrome.tabs.create({
+                    url: chrome.runtime.getURL("auth.html"),
+                    });
+					alert("token not working")
+				}
 				return
 				}
 				} catch (err) {
@@ -29,13 +40,10 @@ export default function Check() {
 				}
 				};
 			handleVerification()
-		}else{
-			chrome.tabs.create({
-			url: chrome.runtime.getURL("auth.html"),
-			});
 		}
     }
 	const handleCheck = async () => {
+	if (token !== null){
     try {
       const res = await fetch('http://localhost:8080/checktoken', {
         method: 'GET',
@@ -53,11 +61,12 @@ export default function Check() {
     chrome.tabs.create({
     url: chrome.runtime.getURL("auth.html"),
    });
-		console.log(data)
+	return
       }
     } catch (err) {
 		navigate("/error")
     }
+}
   };
   useEffect(() => {
    handleCheck()

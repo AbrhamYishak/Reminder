@@ -5,6 +5,7 @@ import InactiveMessage from './components/InactiveMessage.jsx';
 import Setting from './components/Setting.jsx';
 import Check from './components/Check.jsx';
 import ErrorTv from './components/ErrorTv.jsx';
+import VerifyWarning from './components/VerifyWarning.jsx'
 import { OpenProvider } from './components/MyContext.jsx';
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Check />} />
             <Route path="/error" element={<ErrorTv />} />
+			<Route path = "/verify" element={<VerifyWarning/>}/>
             <Route path="/dashboard" element={<Navbar />}>
               <Route index element={<ActiveMessages />} />
               <Route path="inactive" element={<InactiveMessage />} />

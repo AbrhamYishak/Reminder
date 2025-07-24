@@ -36,8 +36,8 @@ document.getElementById("loginWithgoogle").addEventListener("click", () => {
     if (response.error) {
       return;
     }
-
     const token = response.token;
+	console.log(token)
     fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
       headers: { Authorization: `Bearer ${token}` }
     })
@@ -65,8 +65,9 @@ document.addEventListener('DOMContentLoaded',()=> {
 
         const data = await res.json();
         if (res.ok) {
-          alert('Login/Registration Successful. Check your email for verification.');  
+          alert('Login Successful. Check your email for verification.');  
 		  localStorage.setItem("ReminderSetupToken", data.token);
+		  console.log(localStorage.getItem("ReminderSetupToken"))
 		  if (data.redirect === "/setup"){
             window.location.href = "setup.html";
 			}else{

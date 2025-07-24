@@ -29,7 +29,6 @@ func Register(c *gin.Context){
 		return
 	    }
 	}
-	if !u.IsVerfied{
 	t,err := token.GetVerificationToken(u.ID,u.SessionID)
 	if err != nil{
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not generate verification token"})
@@ -38,9 +37,7 @@ func Register(c *gin.Context){
 	link := fmt.Sprintf("http://%s:%s/verify/%s",internal.Env.Host,internal.Env.Port,t)
 	if err := SendVerificationMail(link,[]string{u.Email}); err!=nil{
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not send the verification token"})
-		return
-	}
-}
+		return}
 	if u.TimeZone == ""{
 		t,err := token.GetSetupToken(u.ID)
 		if err != nil{
@@ -50,6 +47,11 @@ func Register(c *gin.Context){
 		c.IndentedJSON(http.StatusOK, gin.H{"message":"succesfully created the user","token":t,"redirect":"/setup"})	
 		return
 	}
-	c.IndentedJSON(http.StatusOK, gin.H{"message":"succesfully created the user","redirect":"/dashboard"})	
+    t,err = token.GetSetupToken(u.ID)
+		if err != nil{
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not generate setup token"})
+		return
+	    }
+	c.IndentedJSON(http.StatusOK, gin.H{"message":"succesfully created the user","token":t,"redirect":"/dashboard"})	
 }
 

@@ -50,7 +50,7 @@ func JwtSetupAuthMiddleware(secret string) gin.HandlerFunc {
 		authHeader := c.Request.Header.Get("Authorization")
 		t := strings.Split(authHeader, " ")
 		if len(t) == 2 {
-			authToken := t[1]
+			authToken := t[1]	
 			authorized, _ := token.VerifyToken(authToken, secret)
 			if authorized {
 				db := db.Connection()
@@ -63,7 +63,11 @@ func JwtSetupAuthMiddleware(secret string) gin.HandlerFunc {
 				}
 				fmt.Println(id,issetup)
                 if err := db.First(&u,id).Error; err != nil{
-					c.IndentedJSON(http.StatusUnauthorized, gin.H{"message":"could not find user"})
+					c.IndentedJSON(http.StatusUnauthorized, gin.H{"message":"could not find user"})	
+					c.Abort()
+				}
+				if !u.IsVerfied{
+					c.IndentedJSON(http.StatusUnauthorized, gin.H{"message":"not verified"})
 					c.Abort()
 				}
 				if !issetup{
@@ -74,7 +78,7 @@ func JwtSetupAuthMiddleware(secret string) gin.HandlerFunc {
 				c.Next()
 				return
 			}
-			c.JSON(http.StatusUnauthorized, gin.H{"message":"invalid token"})
+			c.JSON(http.StatusUnauthorized, gin.H{"message":"invalid token "})
 			c.Abort()
 			return
 		}
