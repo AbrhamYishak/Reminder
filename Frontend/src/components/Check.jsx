@@ -31,7 +31,6 @@ export default function Check() {
 					chrome.tabs.create({
                     url: chrome.runtime.getURL("auth.html"),
                     });
-					alert("token not working")
 				}
 				return
 				}

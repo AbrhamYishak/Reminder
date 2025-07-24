@@ -48,7 +48,7 @@ func Register(c *gin.Context){
 		return
 	}
     t,err = token.GetSetupToken(u.ID)
-		if err != nil{
+	if err != nil{
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not generate setup token"})
 		return
 	    }

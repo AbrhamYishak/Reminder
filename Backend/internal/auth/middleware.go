@@ -75,6 +75,7 @@ func JwtSetupAuthMiddleware(secret string) gin.HandlerFunc {
 					c.Abort()
 				}
 				c.Set("id", id)
+				c.Set("token", authToken)
 				c.Next()
 				return
 			}

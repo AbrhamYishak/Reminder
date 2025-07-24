@@ -11,7 +11,7 @@ import (
 ) 
  func GetAuthToken(c *gin.Context){
 	db := db.Connection()
-	t := c.Param("token")
+	t := c.GetString("token")
 	fmt.Println(t)
 	if ans,err := token.VerifyToken(t, internal.Env.JwtKey); err != nil || !ans{
 		c.IndentedJSON(http.StatusUnauthorized, gin.H{"message":fmt.Sprintf("invalid token, err %v",err)})

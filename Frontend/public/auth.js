@@ -29,7 +29,12 @@ async function send(userData) {
   }
 }
 document.getElementById("loginWithgoogle").addEventListener("click", () => {
+	console.log("i am clicked from button")
   chrome.runtime.sendMessage("LOGIN_WITH_GOOGLE", (response) => {
+  if (chrome.runtime.lastError) {
+    console.error("Runtime error:", chrome.runtime.lastError.message);
+    return;
+  }
   if (!response) {
     return;
   }
