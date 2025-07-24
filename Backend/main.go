@@ -4,18 +4,12 @@ import (
 	"backend/internal/auth"
 	"backend/internal/endpoints"
 	"backend/internal/scheduler"
-	"log"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
-	"os"
+	"backend/internal"
 )
 func main(){
-	err := godotenv.Load()
-	if err != nil{
-		log.Fatal("could not load the .env file")
-	}
-	secret := os.Getenv("secret_key")
+	internal.Init()
 	scheduler.Loader()
 	go scheduler.Scheduler()
 	router := gin.Default()
@@ -31,12 +25,12 @@ func main(){
 	router.POST("/loginwithgoogle", auth.LoginWithGoogle)
 	router.GET("/verify/:token", auth.Verify)
 	setup := router.Group("/")
-	setup.Use(auth.JwtSetupAuthMiddleware(secret))
+	setup.Use(auth.JwtSetupAuthMiddleware(internal.Env.JwtKey))
 	{
 	setup.POST("/setupbefore", endpoints.SetupTime)
 	setup.POST("/getauthtoken", auth.GetAuthToken)
 	}
-	router.Use(auth.JwtAuthMiddleware("your_jwt_secret"))
+	router.Use(auth.JwtAuthMiddleware(internal.Env.JwtKey))
 	router.POST("/logout", auth.Logout)
 	router.POST("/createMessage", endpoints.CreateMessage)
 	router.GET("/checktoken", auth.CheckToken)

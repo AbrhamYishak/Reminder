@@ -1,8 +1,8 @@
 package endpoints
 
-import (
-	"backend/internal"
+import (	
 	"net/http"
+	"backend/internal"
 	"github.com/gin-gonic/gin"
 )
 type m struct{

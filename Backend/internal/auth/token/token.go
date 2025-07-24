@@ -4,25 +4,26 @@ import (
 	"time"
 	"fmt"
 	"github.com/google/uuid"
+	"backend/internal"
 )
 type Claims struct {
-    User_id int64
+    UserID int64
 	SessionID string
 	jwt.RegisteredClaims
 }
 type Setupclaims struct {
-	User_id int64
+	UserID int64
 	SetupToken bool
 	jwt.RegisteredClaims
 }
 func GenerateSessionID()string{
     return uuid.NewString() 
 }
-func GetVerificationToken(user_id int64,session string)(string, error){
-	var jwtKey = []byte("your_jwt_secret")
+func GetVerificationToken(userID int64,session string)(string, error){
+	var jwtKey = []byte(internal.Env.JwtKey)
 	expirationTime := time.Now().Add(20 * time.Minute)
 	claims := &Claims{
-		User_id: user_id,
+		UserID: userID,
 		SessionID: session,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(expirationTime),
@@ -31,11 +32,11 @@ func GetVerificationToken(user_id int64,session string)(string, error){
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString(jwtKey)
 }
-func GetSetupToken(user_id int64)(string, error){
-	var jwtKey = []byte("your_jwt_secret")
+func GetSetupToken(userID int64)(string, error){
+	var jwtKey = []byte(internal.Env.JwtKey)
 	expirationTime := time.Now().Add(20 * time.Minute)
 	claims := &Setupclaims{
-		User_id: user_id,
+		UserID: userID,
 		SetupToken: true,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(expirationTime),
@@ -47,10 +48,10 @@ func GetSetupToken(user_id int64)(string, error){
 }
 
 func GetToken(userID int64, session string)(string, error){
-	var jwtKey = []byte("your_jwt_secret")
+	var jwtKey = []byte(internal.Env.JwtKey)
 	expirationTime := time.Now().AddDate(0, 6, 0)
 	claims := &Claims{
-		User_id : userID,
+		UserID : userID,
 		SessionID: session,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(expirationTime),
@@ -85,7 +86,7 @@ func ExtractFromToken(tokenString string, secret string) (int64,string, error) {
 	}
 
 	if claims, ok := token.Claims.(*Claims); ok && token.Valid {
-		return claims.User_id,claims.SessionID ,nil
+		return claims.UserID,claims.SessionID ,nil
 	} else {
 		return 0,"", fmt.Errorf("invalid token")
 	}
@@ -103,7 +104,7 @@ func ExtractFromSetupToken(tokenString string, secret string) (int64,bool, error
 	}
 
 	if claims, ok := token.Claims.(*Setupclaims); ok && token.Valid {
-		return claims.User_id,claims.SetupToken,nil
+		return claims.UserID,claims.SetupToken,nil
 	} else {
 		return 0, false,fmt.Errorf("invalid token")
 	}

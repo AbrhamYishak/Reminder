@@ -2,11 +2,11 @@ package auth
 
 import (
 	"backend/db"
-	"backend/internal/auth/token"
 	"backend/models"
 	"net/http"
     "fmt"
 	"github.com/gin-gonic/gin"
+	"backend/internal/auth/token"
 ) 
  func GetAuthToken(c *gin.Context){
 	db := db.Connection()

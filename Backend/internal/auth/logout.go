@@ -9,12 +9,12 @@ import (
 func Logout(c *gin.Context){
 	db := db.Connection()
 	id := c.GetInt64("id")
-	new_sessionid := token.GenerateSessionID()
+	newSessionid := token.GenerateSessionID()
     var u models.User
 	if err := db.First(&u, id).Error; err != nil{
 		c.IndentedJSON(http.StatusNotFound, gin.H{"message":"user with this id not found"})
 	}
-	u.SessionID = new_sessionid
+	u.SessionID = newSessionid
 	u.IsVerfied = false
 	if err := db.Save(&u).Error; err != nil{
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not update the session of the user"})

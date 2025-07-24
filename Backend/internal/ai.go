@@ -9,7 +9,7 @@ import (
 func GenerateMessage(message string) (string, error) {
     ctx := context.Background()
     client, err := genai.NewClient(ctx, &genai.ClientConfig{
-        APIKey:  "api_key",
+        APIKey:  Env.APIKey,
         Backend: genai.BackendGeminiAPI,
     })
     if err != nil {

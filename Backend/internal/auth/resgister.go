@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"github.com/gin-gonic/gin"
+	"backend/internal"
 )
 func Register(c *gin.Context){
 	db := db.Connection()
@@ -34,7 +35,7 @@ func Register(c *gin.Context){
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not generate verification token"})
 		return
 	}
-	link := fmt.Sprintf("http://localhost:8080/verify/%s",t)
+	link := fmt.Sprintf("http://%s:%s/verify/%s",internal.Env.Host,internal.Env.Port,t)
 	if err := SendVerificationMail(link,[]string{u.Email}); err!=nil{
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not send the verification token"})
 		return
