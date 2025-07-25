@@ -83,7 +83,7 @@ function Table({ datas }) {
                     <button type = "button" onClick={() => handleDelete(data.ID)} className="truncate text-[0.25rem] bg-white border border-gray-200 hover:bg-gray-100 hover:text-red-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700">
                       <Trash/>
                     </button>
-				     <Edit id = {data.ID} link = {data.Link} message = {data.Message}/> 
+				     <Edit id = {data.ID} link = {data.Link} message = {data.Message} time = {data.Time}/> 
 				     <Expands link = {data.Link} message = {data.Message} time = {data.Time}/> 
 				   </div>
                 </td>

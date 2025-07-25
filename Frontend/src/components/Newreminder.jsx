@@ -16,7 +16,7 @@ function Newreminder() {
     setlink(url)
    });
   async function Getdata() {
-    setOpen(prev => !prev)
+    setOpen(false)
     const endpoint = 'http://localhost:8080/createMessage';
     const res = await fetch(endpoint, {
       method: 'POST',
@@ -29,8 +29,7 @@ function Newreminder() {
       alert(data.message);
       return;
     }
-
-    setmessage_data(data)
+	location.reload()
   }
 
   async function HandleAi() {
@@ -65,18 +64,20 @@ function Newreminder() {
 	   }
 
 	   const data = await res.json();
-	setmessage(data.Message)
+	   setmessage(data.Message)
 	 }
   return (
-  <div className="fixed w-full max-w-[300px] bg-white rounded-lg shadow-md p-6 z-10 top-1/6">
+  <div className="fixed w-full h-full inset-0 bg-white p-6 z-10">
 	<div className="flex flex-col text-red-500">
 	  <button type="button" className="self-end" onClick={()=>setOpen(prev => !prev)}><X/></button>
 	  </div>
-    <h2 className="text-2xl font-bold text-gray-800 mb-4">New Reminder</h2>
+    <h2 className="text-2xl font-bold text-gray-800 mb-3">New Reminder</h2>
     <form className="flex flex-col">
-      <input type="text" className="bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" placeholder="Link" value = {link} onChange = {(e)=>setlink(e.target.value)}/>
-	  <div className="flex justify-between items-center">
-	  <input type="text" className="bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" placeholder="hour:min" value = {hour} onChange = {(e)=>sethour(e.target.value)}/>
+	  <lable htmlFor = "link" className="text-lg">Link</lable>
+      <input type="text" className="bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-3 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" placeholder="Link" id="link" value = {link} onChange = {(e)=>setlink(e.target.value)}/>
+	  <lable htmlFor = "time" className="text-lg">Time</lable>
+	  <div className="flex justify-start gap-2 items-center">
+	  <input type="text" id = "time" className="bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-3 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" placeholder="hour:min" value = {hour} onChange = {(e)=>sethour(e.target.value)}/>
 	  <div class="inset-y-0 my-aut0 flex items-center bg-white pb-2">
 	  <select class="text-lg outline-none rounded-lg h-full" value = {t} onChange={(e)=>sett(e.target.value)}>
                         <option>AM</option>
@@ -84,8 +85,10 @@ function Newreminder() {
                     </select>
         </div>
 	  </div>
-      <input type="date" className="bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" placeholder="Date" value = {d} onChange = {(e)=>setd(e.target.value)}/>
-      <textarea name="message" className="bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" placeholder="Message" value = {message} onChange = {(e)=>setmessage(e.target.value)}>
+	  <lable htmlFor = "date" className="text-lg">Date</lable>
+      <input type="date" id="date" className="bg-gray-100 w-1/2 text-gray-800 border-0 rounded-md p-2 mb-3 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" placeholder="Date" value = {d} onChange = {(e)=>setd(e.target.value)}/> 
+	  <lable htmlFor = "mess" className="text-lg">Message</lable>
+	  <textarea name="message" id="mess" className="bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-3 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150 h-[20vh]" placeholder="Message" value = {message} onChange = {(e)=>setmessage(e.target.value)}>
 	  </textarea>
 <div class="relative inline-flex items-center justify-center gap-4 group">
   <div

@@ -1,15 +1,32 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {Pencil} from "lucide-react"
-export default function Edit({id, link, message}) {
+export default function Edit({id, link, message ,time}) {
+  const result = time.split("T"); 
+  const h = result[1].split("+");
+  const f = h[0].split(":") 
   const [open, setOpen] = useState(false);
   const [hour, sethour] = useState("")
-  const [d, setd] = useState("")
+  const [d, setd] = useState(result[0])
   const [t, sett] = useState("AM")
   const [m, setm] = useState(message)
   const [l, setl] = useState(link)
   const token = localStorage.getItem("ReminderToken")
   const togglePopover = () => setOpen(prev => !prev);
   const popoverRef = useRef(null);
+useEffect(() => {
+  if (parseInt(f[0]) > 11) {
+	sett("PM");
+	if (parseInt(f[0]) > 12){
+		let ans = String(parseInt(f[0])%12)
+	    sethour(ans+":"+f[1]);
+	}else{
+		sethour(f[0]+":"+f[1])	
+	}
+  } else {
+    sett("AM");
+	sethour(f[0]+":"+f[1])	
+  }
+}, [time]);
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -59,9 +76,10 @@ export default function Edit({id, link, message}) {
       className="bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150 w-full break-words"
       value={l}
 	  onChange = {(e)=>setl(e.target.value)}
+	  required
     />
 	<div className="flex justify-between items-center">
-	<input type="text" className="bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" placeholder="hour:min" value = {hour} onChange = {(e)=>sethour(e.target.value)}/>
+	<input type="text" className="bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" placeholder="hour:min" value = {hour} onChange = {(e)=>sethour(e.target.value)} required/>
 	<div class="inset-y-0 my-aut0 flex items-center bg-white pb-2">
 	<select class="text-lg outline-none rounded-lg h-full" value = {t} onChange={(e)=>sett(e.target.value)}>
         <option>AM</option>
@@ -69,7 +87,7 @@ export default function Edit({id, link, message}) {
     </select>
     </div>
 	</div>
-    <input type="date" className="bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-50 transition ease-in-out duration-150" placeholder="Date" value = {d} onChange = {(e)=>setd(e.target.value)}/>
+    <input type="date" className="bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-50 transition ease-in-out duration-150" placeholder="Date" value = {d} onChange = {(e)=>setd(e.target.value)} required/>
     <textarea
       name="message"
       className="bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150 w-full resize-none overflow-y-scroll"
@@ -77,6 +95,7 @@ export default function Edit({id, link, message}) {
       value={m}
       rows={4}
 	  onChange = {(e)=>setm(e.target.value)}
+	  required
     />
 <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onClick={()=>handleEdit(id)}>Edit</button>
   </form>
