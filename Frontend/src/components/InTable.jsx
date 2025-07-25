@@ -1,3 +1,4 @@
+import Expands from './Expands.jsx'
 function InTable({ datas }) {
   const handleDelete = async (id) => {
     try {
@@ -18,9 +19,10 @@ function InTable({ datas }) {
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
               <th className="w-[10%] px-2 py-3">Id</th>
-              <th className="w-[25%] px-2 py-3">Link</th>
-              <th className="w-[45%] px-2 py-3">Message</th>
+              <th className="w-[20%] px-2 py-3">Link</th>
+              <th className="w-[40%] px-2 py-3">Message</th>
               <th className="w-[20%] px-2 py-3">Time</th>
+			  <th className="w-[10%] px-2 py-3"> Ac</th>
             </tr>
           </thead>
           <tbody>
@@ -38,6 +40,9 @@ function InTable({ datas }) {
                 <td className="px-2 py-2 truncate whitespace-nowrap" title={data.Time}>
                   {data.Time}
                 </td>
+				<td>
+                   <Expands time = {data.Time} message = {data.Message} link = {data.Link} />
+				</td>
               </tr>
             ))}
           </tbody>

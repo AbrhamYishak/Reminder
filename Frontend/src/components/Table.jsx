@@ -1,8 +1,9 @@
 import React, {useContext,useState} from 'react'
-import { Expand } from 'lucide-react';
 import { Pencil } from 'lucide-react';
 import { Check } from 'lucide-react';
 import { Trash } from 'lucide-react';
+import Expands from './Expands.jsx'
+import Edit from './Edit.jsx'
 import {OpenContext} from './MyContext.jsx'
 function Table({ datas }) {
   const token = localStorage.getItem("ReminderToken")
@@ -21,6 +22,7 @@ function Table({ datas }) {
     });
       if (!response.ok) throw new Error('Delete failed');
       console.log(`Deleted item with id ${id}`);
+	  location.reload()
     } catch (err) {
       console.error(err);
     }
@@ -39,7 +41,8 @@ function Table({ datas }) {
 		"Authorization": `Bearer ${token}`},
     });
       if (!response.ok) throw new Error('Complation failed');
-      console.log(`Deleted item with id ${id}`);
+		console.log(`Completed item with id ${id}`);
+		location.reload()
     } catch (err) {
       console.error(err);
     }
@@ -52,9 +55,9 @@ function Table({ datas }) {
             <tr>
               <th className="w-[10%] px-2 py-3">Id</th>
               <th className="w-[25%] px-2 py-3">Link</th>
-              <th className="w-[35%] px-2 py-3">Message</th>
+              <th className="w-[40%] px-2 py-3">Message</th>
               <th className="w-[15%] px-2 py-3">Time</th>
-              <th className="w-[15%] px-2 py-3">Action</th>
+              <th className="w-[10%] px-2 py-3">Ac</th>
             </tr>
           </thead>
           <tbody>
@@ -80,13 +83,9 @@ function Table({ datas }) {
                     <button type = "button" onClick={() => handleDelete(data.ID)} className="truncate text-[0.25rem] bg-white border border-gray-200 hover:bg-gray-100 hover:text-red-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700">
                       <Trash/>
                     </button>
-                    <button type = "button" className="truncate text-[0.25rem] bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700">
-                      <Pencil/>
-                    </button>
-                    <button type = "button" className="truncate text-[0.25rem] p-1 bg-white border border-gray-200 hover:bg-gray-100 hover:text-amber-300 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700">
-                      <Expand/>
-                    </button>
-                  </div>
+				     <Edit id = {data.ID} link = {data.Link} message = {data.Message}/> 
+				     <Expands link = {data.Link} message = {data.Message} time = {data.Time}/> 
+				   </div>
                 </td>
               </tr>
             ))}

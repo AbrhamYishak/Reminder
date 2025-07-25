@@ -24,13 +24,12 @@ function Newreminder() {
 		"Authorization": `Bearer ${token}`},
 		body: JSON.stringify({ Message: message, Link: link, Hour: hour, Date:d, Meridiem : t }),
     });
-
+	const data = await res.json();
     if (!res.ok) {
-      alert('Failed to fetch data');
+      alert(data.message);
       return;
     }
 
-    const data = await res.json();
     setmessage_data(data)
   }
 
@@ -117,7 +116,7 @@ function Newreminder() {
     </svg>
   </button>
 </div>
-	  <button type="submit" className="bg-gradient-to-r from-green-300 to-green-500 text-white font-bold py-2 px-4 rounded-md mt-4 hover:to-green-700 transition ease-in-out duration-150" onClick = {Getdata} >+ Add</button>
+	  <button type="submit" className="bg-green-500 text-white font-bold py-2 px-4 rounded-md mt-4 hover:to-green-700 transition ease-in-out duration-150" onClick = {Getdata} >+ Add</button>
     </form>
   </div>
   )

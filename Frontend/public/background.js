@@ -1,5 +1,3 @@
-console.log("background js");
-
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message === "LOGIN_WITH_GOOGLE") {
     console.log("go the message");
@@ -14,6 +12,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       }
     });
 
-    return true; // ✅ keeps the message channel alive
+    return true;
   }
 });
