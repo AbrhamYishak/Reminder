@@ -35,11 +35,10 @@ func CreateMessage(c *gin.Context){
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not write the data to the database"})
 		return
 	}
-
-	scheduler.HLock.Lock()
+    if ! (*scheduler.H)[scheduler.H.Len()-1].Time.After(m.Time){
+ 	scheduler.HLock.Lock()
 	heap.Push(scheduler.H, m)
-	scheduler.HLock.Unlock()
-
+	scheduler.HLock.Unlock()}
 	select {
 	case scheduler.UpdateChan <- struct{}{}:
 	default:

@@ -5,7 +5,7 @@ import (
 type MessageHeap []models.Message
 func (h MessageHeap) Len() int { return len(h) }
 func (h MessageHeap) Less(i, j int) bool {
-	return h[i].Time.Before(h[j].Time) // min-heap by send time
+	return h[i].Time.Before(h[j].Time)
 }
 func (h MessageHeap) Swap(i, j int) { h[i], h[j] = h[j], h[i] }
 

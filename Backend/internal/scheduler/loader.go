@@ -8,7 +8,7 @@ import (
 func Loader(){
 	db := db.Connection()
 	var messages []models.Message
-	db.Find(&messages)
+	db.Order("Time asc").Limit(100).Find(&messages)
 	heap.Init(H)
 	for _, m := range messages {
 		heap.Push(H, m)
