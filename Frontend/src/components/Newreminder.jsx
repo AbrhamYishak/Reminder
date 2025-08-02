@@ -17,7 +17,7 @@ function Newreminder() {
    });
   async function Getdata() {
     setOpen(false)
-    const endpoint = 'http://localhost:8080/createMessage';
+    const endpoint = `${process.env.url}/createMessage`;
     const res = await fetch(endpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json',

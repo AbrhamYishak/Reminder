@@ -41,7 +41,7 @@ useEffect(() => {
   }, []);
   const handleEdit = async (id) => {
     try {
-      const response = await fetch(`http://localhost:8080/editMessage/${id}`, {
+      const response = await fetch(`${process.env.url}/editMessage/${id}`, {
         method: 'PATCH',
       headers: { 'Content-Type': 'application/json',
 		"Authorization": `Bearer ${token}`},

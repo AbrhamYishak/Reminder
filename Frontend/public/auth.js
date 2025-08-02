@@ -1,7 +1,7 @@
 async function send(userData) {
   try {
 	  console.log(userData.email)
-    const res = await fetch("http://localhost:8080/loginwithgoogle", {
+    const res = await fetch(`${process.env.url}/loginwithgoogle`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded',()=> {
 
       const email = document.getElementById('email').value;
       try {
-        const res = await fetch('http://localhost:8080/register', {
+        const res = await fetch(`${process.env.url}/register`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

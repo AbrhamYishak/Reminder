@@ -6,7 +6,7 @@ function InactiveMessage() {
   const token = localStorage.getItem("ReminderToken")
   const [loading, setloading] = useState(true)
   async function Getdata() {
-    const endpoint = 'http://localhost:8080/getInactiveMessages';
+    const endpoint = `${process.env.url}/getInactiveMessages`;
     const res = await fetch(endpoint, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json',

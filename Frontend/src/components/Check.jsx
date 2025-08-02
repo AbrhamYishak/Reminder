@@ -2,7 +2,6 @@ import React, {useEffect} from 'react'
 import { useNavigate } from 'react-router-dom';
 
 export default function Check() {
-	localStorage.clear("ReminderSetupToken")
     const token = localStorage.getItem("ReminderToken");
 	let navigate = useNavigate()
 	if (token === null){
@@ -15,7 +14,7 @@ export default function Check() {
 		}else{
 			const handleVerification = async () => {
 				try {
-				const res = await fetch('http://localhost:8080/getauthtoken', {
+				const res = await fetch(`${process.env.url}/getauthtoken`, {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json',
 					"Authorization": `Bearer ${setuptoken}`},
@@ -47,7 +46,7 @@ export default function Check() {
 	const handleCheck = async () => {
 	if (token !== null){
     try {
-      const res = await fetch('http://localhost:8080/checktoken', {
+      const res = await fetch(`${process.env.url}/checktoken`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json',
 		"Authorization": `Bearer ${token}`},

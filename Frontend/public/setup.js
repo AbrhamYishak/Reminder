@@ -5,7 +5,7 @@ document.getElementById('setupForm').addEventListener('submit', async (e) => {
   const token = localStorage.getItem("ReminderSetupToken");
   try {
     console.log(token)
-    const res = await fetch('http://localhost:8080/setupbefore', {
+    const res = await fetch(`${process.env.url}/setupbefore`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

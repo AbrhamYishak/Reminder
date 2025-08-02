@@ -10,7 +10,7 @@ function ActiveMessages()
   const [loading, setloading] = useState(true)
   const token = localStorage.getItem("ReminderToken")
   async function Getdata() {
-    const endpoint = 'http://localhost:8080/getMessages';
+    const endpoint = `${process.env.url}/getMessages`;
     const res = await fetch(endpoint, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json',

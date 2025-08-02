@@ -15,7 +15,7 @@ function Table({ datas }) {
    });
   const handleDelete = async (id) => {
     try {
-      const response = await fetch(`http://localhost:8080/deleteMessage/${id}`, {
+      const response = await fetch(`${process.env.url}/deleteMessage/${id}`, {
         method: 'DELETE',
       headers: { 'Content-Type': 'application/json',
 		"Authorization": `Bearer ${token}`},
@@ -35,7 +35,7 @@ function Table({ datas }) {
 		  return
 	  }
     try {
-      const response = await fetch(`http://localhost:8080/completeMessage/${id}`, {
+      const response = await fetch(`${process.env.url}/completeMessage/${id}`, {
         method: 'POST',
       headers: { 'Content-Type': 'application/json',
 		"Authorization": `Bearer ${token}`},

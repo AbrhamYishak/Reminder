@@ -33,7 +33,7 @@ func Register(c *gin.Context){
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not generate verification token"})
 		return
 	}
-	link := fmt.Sprintf("http://%s:%s/verify/%s",internal.Env.Host,internal.Env.Port,t)
+	link := fmt.Sprintf("%sverify/%s",internal.Env.Backurl,t)
 	if err := SendVerificationMail(link,[]string{u.Email}); err!=nil{
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not send the verification token"})
 		return}

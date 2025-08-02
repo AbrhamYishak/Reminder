@@ -9,12 +9,11 @@ type env struct{
    JwtKey string
    APIKey string
    Dsn string
-   Port string
-   Host string
    BackupEmail string
    BackupEmailAppPassword string
    EmailPort1 int
    EmailPort2 int
+   Backurl string
 }
 var Env env
 func Init(){
@@ -24,8 +23,7 @@ func Init(){
    Env.JwtKey = os.Getenv("secret_key")
    Env.Dsn = os.Getenv("dsn")
    Env.APIKey = os.Getenv("api_key")
-   Env.Port = os.Getenv("port")
-   Env.Host = os.Getenv("host")
+   Env.Backurl = os.Getenv("backurl")
    Env.BackupEmail = os.Getenv("backupemail")
    Env.BackupEmailAppPassword = os.Getenv("backupemailpassword") 
    EmailPort1,err := strconv.Atoi(os.Getenv("emailport1"))
