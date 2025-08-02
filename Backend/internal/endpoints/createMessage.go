@@ -35,14 +35,18 @@ func CreateMessage(c *gin.Context){
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not write the data to the database"})
 		return
 	}
-    if ! (*scheduler.H)[scheduler.H.Len()-1].Time.After(m.Time){
+	if scheduler.H.Len() < 100 {
+    scheduler.HLock.Lock()
+	heap.Push(scheduler.H, m)
+	scheduler.HLock.Unlock()
+	}else if ! (*scheduler.H)[scheduler.H.Len()-1].Time.After(m.Time){
  	scheduler.HLock.Lock()
 	heap.Push(scheduler.H, m)
-	scheduler.HLock.Unlock()}
+	scheduler.HLock.Unlock()
+    }
 	select {
 	case scheduler.UpdateChan <- struct{}{}:
 	default:
 	}
-
 	c.IndentedJSON(http.StatusOK, gin.H{"message": "Successfully created the message"})
 }

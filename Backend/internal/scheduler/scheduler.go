@@ -68,6 +68,10 @@ var Change = make(chan time.Duration)
 				 if err := db.Create(&inmessage).Error; err != nil{
 					 fmt.Println("could not transfer row to inactive messages")
 				 }
+				var mess models.Message
+				if err := db.Order("Time asc").Limit(1).First(&mess).Error; err == nil{
+					heap.Push(H, mess)
+				}
 			}
             } else {
                 HLock.Unlock()
