@@ -28,7 +28,6 @@ func LoginWithGoogle(c *gin.Context){
 	u.IsVerfied = true	
 	u.SessionID = sessionid
 	if !exists{
-		db.AutoMigrate(&u)
     	if err := db.Create(&u).Error; err!=nil{
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not write the data to the database"})
 		return

@@ -1,8 +1,10 @@
 import React , {useState, useEffect} from 'react'
+import Loader from './Loader.jsx'
 import InTable from './InTable.jsx'
 function InactiveMessage() {
   const [message_data, setmessage_data] = useState([])
   const token = localStorage.getItem("ReminderToken")
+  const [loading, setloading] = useState(true)
   async function Getdata() {
     const endpoint = 'http://localhost:8080/getInactiveMessages';
     const res = await fetch(endpoint, {
@@ -19,6 +21,7 @@ function InactiveMessage() {
     const data = await res.json();
     console.log('Received data:', data);
     setmessage_data(data)
+	setloading(false)
   }
   useEffect(() => {
      Getdata()
@@ -38,7 +41,11 @@ function InactiveMessage() {
   };
    return (
     <div className="flex flex-col gap-1 justify-center items-center">
-	<InTable datas = {message_data}/>
+      {loading ? (
+		  <Loader/>
+      ) : (
+		  <InTable datas = {message_data}/>
+      )}
 	<button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onClick={()=>handleDelete()}>Clear</button>
     </div>
   )

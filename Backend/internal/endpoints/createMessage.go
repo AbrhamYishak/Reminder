@@ -29,7 +29,6 @@ func CreateMessage(c *gin.Context){
 		return
 	}
 	m.Time = t
-	db.AutoMigrate(&m)
 	result := db.Create(&m) 
 	if result.Error != nil{
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not write the data to the database"})

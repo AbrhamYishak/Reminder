@@ -29,6 +29,7 @@ func main(){
 	{
 	setup.POST("/setupbefore", endpoints.SetupTime)
 	setup.POST("/getauthtoken", auth.GetAuthToken)
+	setup.GET("/checksetuptoken", auth.CheckToken)
 	}
 	router.Use(auth.JwtAuthMiddleware(internal.Env.JwtKey))
 	router.POST("/logout", auth.Logout)

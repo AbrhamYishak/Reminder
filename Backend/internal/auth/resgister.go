@@ -23,7 +23,6 @@ func Register(c *gin.Context){
 		exists = true
 	}
 	if !exists{
-		db.AutoMigrate(&u)
     	if err := db.Create(&u).Error; err!=nil{
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not write the data to the database"})
 		return

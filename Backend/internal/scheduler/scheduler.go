@@ -64,7 +64,6 @@ var Change = make(chan time.Duration)
 					 continue
 				 }
                  db.Delete(&due, due.ID)
-				 db.AutoMigrate(&inmessage)
 				 if err := db.Create(&inmessage).Error; err != nil{
 					 fmt.Println("could not transfer row to inactive messages")
 				 }
