@@ -46,7 +46,9 @@ export default function Check() {
 	const handleCheck = async () => {
 	if (token !== null){
     try {
-      const res = await fetch(`${process.env.url}/checktoken`, {
+	  const endpoint = `${process.env.url}/checktoken`
+	  console.log(endpoint)
+      const res = await fetch(endpoint, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json',
 		"Authorization": `Bearer ${token}`},
@@ -65,6 +67,7 @@ export default function Check() {
 	return
       }
     } catch (err) {
+		console.log(err)
 		navigate("/error")
     }
 }
