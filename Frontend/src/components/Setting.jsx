@@ -3,7 +3,7 @@ function Setting() {
 	const [time, settime] = useState("")
     const token = localStorage.getItem("ReminderToken");
     async function Setuptime(t) {
-    const endpoint = `${process.env.url}/setup`;
+    const endpoint = "https://reminder-wgwj.onrender.com/setup";
 	console.log(t)
     const res = await fetch(endpoint, {
       method: 'POST',
@@ -20,7 +20,7 @@ function Setting() {
 	}
   }
   async function Logout() {
-    const endpoint = `${process.env.url}/logout`;
+    const endpoint = "https://reminder-wgwj.onrender.com/logout";
     const res = await fetch(endpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json',

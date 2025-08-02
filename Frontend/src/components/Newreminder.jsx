@@ -17,7 +17,7 @@ function Newreminder() {
    });
   async function Getdata() {
     setOpen(false)
-    const endpoint = `${process.env.url}/createMessage`;
+    const endpoint = "https://reminder-wgwj.onrender.com/createMessage";
     const res = await fetch(endpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json',
@@ -50,7 +50,7 @@ function Newreminder() {
     });
 
     const extractedText = result[0].result;
-	const endpoint = 'http://localhost:8080/getAiMessage';
+	const endpoint = "https://reminder-wgwj.onrender.com/getAiMessage";
 	const res = await fetch(endpoint, {
 	     method: 'POST',
 	     headers: { 'Content-Type': 'application/json',

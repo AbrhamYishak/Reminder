@@ -41,7 +41,7 @@ useEffect(() => {
   }, []);
   const handleEdit = async (id) => {
     try {
-      const response = await fetch(`${process.env.url}/editMessage/${id}`, {
+      const response = await fetch(`https://reminder-wgwj.onrender.com/editMessage/${id}`, {
         method: 'PATCH',
       headers: { 'Content-Type': 'application/json',
 		"Authorization": `Bearer ${token}`},

@@ -10,7 +10,7 @@ function ActiveMessages()
   const [loading, setloading] = useState(true)
   const token = localStorage.getItem("ReminderToken")
   async function Getdata() {
-    const endpoint = `${process.env.url}/getMessages`;
+    const endpoint = "https://reminder-wgwj.onrender.com/getMessages";
     const res = await fetch(endpoint, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json',

@@ -14,7 +14,7 @@ export default function Check() {
 		}else{
 			const handleVerification = async () => {
 				try {
-				const res = await fetch(`${process.env.url}/getauthtoken`, {
+				const res = await fetch("https://reminder-wgwj.onrender.com/getauthtoken", {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json',
 					"Authorization": `Bearer ${setuptoken}`},
@@ -46,8 +46,7 @@ export default function Check() {
 	const handleCheck = async () => {
 	if (token !== null){
     try {
-	  const endpoint = `${process.env.url}/checktoken`
-	  console.log(endpoint)
+	  const endpoint = "https://reminder-wgwj.onrender.com/checktoken"
       const res = await fetch(endpoint, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json',
@@ -68,6 +67,7 @@ export default function Check() {
       }
     } catch (err) {
 		console.log(err)
+		alert(err)
 		navigate("/error")
     }
 }

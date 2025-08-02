@@ -6,7 +6,7 @@ function InactiveMessage() {
   const token = localStorage.getItem("ReminderToken")
   const [loading, setloading] = useState(true)
   async function Getdata() {
-    const endpoint = `${process.env.url}/getInactiveMessages`;
+    const endpoint = "https://reminder-wgwj.onrender.com/getInactiveMessages";
     const res = await fetch(endpoint, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json',
@@ -28,7 +28,7 @@ function InactiveMessage() {
   }, []) 
   const handleDelete = async () => {
     try {
-      const response = await fetch("http://localhost:8080/deleteInMessage", {
+      const response = await fetch("https://reminder-wgwj.onrender.com/deleteInMessage", {
         method: 'DELETE',
       headers: { 'Content-Type': 'application/json',
 		"Authorization": `Bearer ${token}`},

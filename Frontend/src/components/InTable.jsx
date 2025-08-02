@@ -2,7 +2,7 @@ import Expands from './Expands.jsx'
 function InTable({ datas }) {
   const handleDelete = async (id) => {
     try {
-      const response = await fetch(`${process.env.url}/deleteMessage/${id}`, {
+      const response = await fetch(`https://reminder-wgwj.onrender.com/deleteMessage/${id}`, {
         method: 'DELETE'
       });
       if (!response.ok) throw new Error('Delete failed');

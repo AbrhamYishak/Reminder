@@ -15,7 +15,7 @@ function Table({ datas }) {
    });
   const handleDelete = async (id) => {
     try {
-      const response = await fetch(`${process.env.url}/deleteMessage/${id}`, {
+      const response = await fetch(`https://reminder-wgwj.onrender.com/deleteMessage/${id}`, {
         method: 'DELETE',
       headers: { 'Content-Type': 'application/json',
 		"Authorization": `Bearer ${token}`},
@@ -35,7 +35,7 @@ function Table({ datas }) {
 		  return
 	  }
     try {
-      const response = await fetch(`${process.env.url}/completeMessage/${id}`, {
+      const response = await fetch(`https://reminder-wgwj.onrender.com/completeMessage/${id}`, {
         method: 'POST',
       headers: { 'Content-Type': 'application/json',
 		"Authorization": `Bearer ${token}`},
