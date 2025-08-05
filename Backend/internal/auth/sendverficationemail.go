@@ -3,12 +3,12 @@ package auth
 import (
 	"fmt"
 	"gopkg.in/gomail.v2"
-	"backend/internal"
+	"backend/internal/env"
 )
 
 func SendVerificationMail(message string, address []string) error {
 	m := gomail.NewMessage()
-	m.SetHeader("From", internal.Env.BackupEmail)
+	m.SetHeader("From", env.Env.BackupEmail)
 	m.SetHeader("To", address...)
 	m.SetHeader("Subject", "Reminder: Email Verification!")
 	m.SetBody("text/html", fmt.Sprintf(`
@@ -17,7 +17,7 @@ func SendVerificationMail(message string, address []string) error {
 		<p>Copy the token and paste it into the token field. The token will expire in 10 minutes.</p>
 	`, message))
 
-	d := gomail.NewDialer("smtp.gmail.com", internal.Env.EmailPort1, internal.Env.BackupEmail, internal.Env.BackupEmailAppPassword )
+	d := gomail.NewDialer("smtp.gmail.com", env.Env.EmailPort1, env.Env.BackupEmail, env.Env.BackupEmailAppPassword )
 	d.SSL = true 
 
 	if err := d.DialAndSend(m); err != nil {

@@ -6,10 +6,10 @@ import (
 	"backend/internal/scheduler"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"backend/internal"
+	"backend/internal/env"
 )
 func main(){
-	internal.Init()
+	env.Init()
 	scheduler.Loader()
 	go scheduler.Scheduler()
 	router := gin.Default()
@@ -25,13 +25,13 @@ func main(){
 	router.POST("/loginwithgoogle", auth.LoginWithGoogle)
 	router.GET("/verify/:token", auth.Verify)
 	setup := router.Group("/")
-	setup.Use(auth.JwtSetupAuthMiddleware(internal.Env.JwtKey))
+	setup.Use(auth.JwtSetupAuthMiddleware(env.Env.JwtKey))
 	{
 	setup.POST("/setupbefore", endpoints.SetupTime)
 	setup.POST("/getauthtoken", auth.GetAuthToken)
 	setup.GET("/checksetuptoken", auth.CheckToken)
 	}
-	router.Use(auth.JwtAuthMiddleware(internal.Env.JwtKey))
+	router.Use(auth.JwtAuthMiddleware(env.Env.JwtKey))
 	router.POST("/logout", auth.Logout)
 	router.POST("/createMessage", endpoints.CreateMessage)
 	router.GET("/checktoken", auth.CheckToken)

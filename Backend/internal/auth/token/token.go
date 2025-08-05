@@ -4,7 +4,7 @@ import (
 	"time"
 	"fmt"
 	"github.com/google/uuid"
-	"backend/internal"
+	"backend/internal/env"
 )
 type Claims struct {
     UserID int64
@@ -20,7 +20,7 @@ func GenerateSessionID()string{
     return uuid.NewString() 
 }
 func GetVerificationToken(userID int64,session string)(string, error){
-	var jwtKey = []byte(internal.Env.JwtKey)
+	var jwtKey = []byte(env.Env.JwtKey)
 	expirationTime := time.Now().Add(20 * time.Minute)
 	claims := &Claims{
 		UserID: userID,
@@ -33,7 +33,7 @@ func GetVerificationToken(userID int64,session string)(string, error){
 	return token.SignedString(jwtKey)
 }
 func GetSetupToken(userID int64)(string, error){
-	var jwtKey = []byte(internal.Env.JwtKey)
+	var jwtKey = []byte(env.Env.JwtKey)
 	expirationTime := time.Now().Add(20 * time.Minute)
 	claims := &Setupclaims{
 		UserID: userID,
@@ -48,7 +48,7 @@ func GetSetupToken(userID int64)(string, error){
 }
 
 func GetToken(userID int64, session string)(string, error){
-	var jwtKey = []byte(internal.Env.JwtKey)
+	var jwtKey = []byte(env.Env.JwtKey)
 	expirationTime := time.Now().AddDate(0, 6, 0)
 	claims := &Claims{
 		UserID : userID,

@@ -7,19 +7,19 @@ import (
     "fmt"
 	"github.com/gin-gonic/gin"
 	"backend/internal/auth/token"
-	"backend/internal"
+	"backend/internal/env"
 ) 
  func GetAuthToken(c *gin.Context){
 	db := db.Connection()
 	t := c.GetString("token")
 	fmt.Println(t)
-	if ans,err := token.VerifyToken(t, internal.Env.JwtKey); err != nil || !ans{
+	if ans,err := token.VerifyToken(t, env.Env.JwtKey); err != nil || !ans{
 		c.IndentedJSON(http.StatusUnauthorized, gin.H{"message":fmt.Sprintf("invalid token, err %v",err)})
 		fmt.Println(err)
 		return
 	}
 	var u models.User
-	id,_,err := token.ExtractFromSetupToken(t, internal.Env.JwtKey)
+	id,_,err := token.ExtractFromSetupToken(t, env.Env.JwtKey)
 	if err != nil{
 		c.IndentedJSON(http.StatusUnauthorized, gin.H{"message":fmt.Sprintf("invalid token during extraction %s",err)})
 		fmt.Println(err)

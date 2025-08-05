@@ -4,12 +4,13 @@ import (
     "context"
     "fmt"
     "google.golang.org/genai"
+	"backend/internal/env"
 )
 
 func GenerateMessage(message string) (string, error) {
     ctx := context.Background()
     client, err := genai.NewClient(ctx, &genai.ClientConfig{
-        APIKey:  Env.APIKey,
+        APIKey:  env.Env.APIKey,
         Backend: genai.BackendGeminiAPI,
     })
     if err != nil {
