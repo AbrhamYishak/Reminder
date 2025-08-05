@@ -13,7 +13,7 @@ func ToInactiveMessages(message models.Message){
 	inmessage.UserID = message.UserID
 	var count int64
 	db.Model(&models.InactiveMessage{}).Where("user_id = ?", message.UserID).Count(&count)
-	if count > 10 {
+	if count > 9 {
 		var old models.InactiveMessage
 		if err := db.Order("time").First(&old); err != nil{
 			fmt.Println("could not find the oldest inactive messages")

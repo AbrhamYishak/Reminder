@@ -5,6 +5,7 @@ import (
 	"net/http"
    "backend/db"	
    "fmt"
+   "backend/internal"
 )
 func CompleteMail(c *gin.Context){
 	id := c.Param("id")
@@ -20,15 +21,6 @@ func CompleteMail(c *gin.Context){
 		fmt.Println(err)
 		return
 	}
-	var inmessage models.InactiveMessage
-	inmessage.Message = m.Message
-	inmessage.Link = m.Link
-	inmessage.Time = m.Time
-	inmessage.UserID = m.UserID
-	if err := db.Create(&inmessage).Error; err != nil{
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message":"could not add the message to history"})
-		fmt.Println(err)
-		return
-	}
+	internal.ToInactiveMessages(m)
 	c.IndentedJSON(http.StatusOK, gin.H{"message":"successfully completed the message"})
 }
