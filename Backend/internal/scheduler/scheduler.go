@@ -59,6 +59,7 @@ var Change = make(chan time.Duration)
 					 continue
 				 }
 				internal.ToInactiveMessages(message)
+				db.Delete(&message)
 				var mess models.Message
 				if err := db.Order("Time asc").Limit(1).First(&mess).Error; err == nil{
 					heap.Push(H, mess)
